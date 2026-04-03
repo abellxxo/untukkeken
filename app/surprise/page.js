@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import "./surprise.css";
 
-const PLAYLIST_ID = "3hBtJU9oHgkckXErVff3qM";
+const PLAYLIST_ID = "3SfFMwOIDwQ7G4cI0mkmwK";
 
 const MONTHS = [
   { id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a" },
