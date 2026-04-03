@@ -23,7 +23,7 @@ export async function GET(request) {
     const accessToken = tokenData.access_token;
 
     if (!accessToken) {
-      return Response.json({ error: "Failed to get token" }, { status: 500 });
+      return Response.json({ error: "Failed to get token", tokenData }, { status: 500 });
     }
 
     const playlistRes = await fetch(
@@ -32,25 +32,10 @@ export async function GET(request) {
     );
 
     const playlist = await playlistRes.json();
-    console.log("Spotify response:", JSON.stringify(playlist));
-    const tracks = playlist.tracks.items
-      .filter((item) => item.track)
-      .map((item) => ({
-        id: item.track.id,
-        name: item.track.name,
-        artists: item.track.artists.map((a) => a.name).join(", "),
-        duration: formatDuration(item.track.duration_ms),
-        preview_url: item.track.preview_url,
-        cover: item.track.album?.images?.[1]?.url || item.track.album?.images?.[0]?.url || null,
-      }));
 
-    const info = {
-      name: playlist.name,
-      description: playlist.description,
-      cover: playlist.images?.[0]?.url || null,
-    };
+    // debug sementara
+    return Response.json({ debug: playlist });
 
-    return Response.json({ tracks, info });
   } catch (err) {
     return Response.json({ error: err.message }, { status: 500 });
   }
