@@ -6,7 +6,7 @@ import "./surprise.css";
 const PLAYLIST_ID = "3hBtJU9oHgkckXErVff3qM";
 
 const MONTHS = [
-  { id: "oct", name: "October", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a" },
+  { id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a" },
   { id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c" },
   { id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d" },
   { id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d" },
