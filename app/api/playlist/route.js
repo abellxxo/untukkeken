@@ -17,22 +17,27 @@ export async function GET(request) {
       return Response.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const playlistRes = await fetch(
-      `https://api.spotify.com/v1/playlists/${playlistId}`,
-      { headers: { Authorization: `Bearer ${accessToken}` } }
-    );
+    const [playlistRes, tracksRes] = await Promise.all([
+      fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }),
+      fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }),
+    ]);
 
     const playlist = await playlistRes.json();
+    const tracksData = await tracksRes.json();
 
-    const tracks = playlist.items.items
-      .filter((item) => item.item)
+    const tracks = tracksData.items
+      .filter((item) => item.track)
       .map((item) => ({
-        id: item.item.id,
-        name: item.item.name,
-        artists: item.item.artists.map((a) => a.name).join(", "),
-        duration: formatDuration(item.item.duration_ms),
-        preview_url: item.item.preview_url,
-        cover: item.item.album?.images?.[1]?.url || item.item.album?.images?.[0]?.url || null,
+        id: item.track.id,
+        name: item.track.name,
+        artists: item.track.artists.map((a) => a.name).join(", "),
+        duration: formatDuration(item.track.duration_ms),
+        preview_url: item.track.preview_url,
+        cover: item.track.album?.images?.[1]?.url || item.track.album?.images?.[0]?.url || null,
       }));
 
     const info = {

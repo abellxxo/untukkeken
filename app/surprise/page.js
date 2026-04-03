@@ -216,10 +216,9 @@ export default function SurprisePage() {
   if (!session) {
     return (
       <div style={{ background: "#000", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
-        <img src="/iconspotify.png" alt="logo" width={160} style={{ objectFit: "contain" }} />
-        <p style={{ color: "#b3b3b3", fontSize: 16 }}>Login to listen together 💕</p>
+        <img src="/iconspotify.png" alt="logo" width={300} style={{ objectFit: "contain" }} />
         <button onClick={() => signIn("spotify")} style={{ background: "#1DB954", color: "#000", border: "none", borderRadius: 500, padding: "14px 40px", fontSize: 15, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-          Login with Spotify
+          Login sek
         </button>
       </div>
     );
