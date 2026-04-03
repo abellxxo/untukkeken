@@ -14,7 +14,7 @@ export async function GET(request) {
     const accessToken = session?.accessToken;
 
     if (!accessToken) {
-      return Response.json({ error: "Not authenticated", session }, { status: 401 });
+      return Response.json({ error: "Not authenticated" }, { status: 401 });
     }
 
     const playlistRes = await fetch(
@@ -23,9 +23,32 @@ export async function GET(request) {
     );
 
     const playlist = await playlistRes.json();
-    return Response.json({ debug: playlist });
 
+    const tracks = playlist.items.items
+      .filter((item) => item.item)
+      .map((item) => ({
+        id: item.item.id,
+        name: item.item.name,
+        artists: item.item.artists.map((a) => a.name).join(", "),
+        duration: formatDuration(item.item.duration_ms),
+        preview_url: item.item.preview_url,
+        cover: item.item.album?.images?.[1]?.url || item.item.album?.images?.[0]?.url || null,
+      }));
+
+    const info = {
+      name: playlist.name,
+      description: playlist.description,
+      cover: playlist.images?.[0]?.url || null,
+    };
+
+    return Response.json({ tracks, info });
   } catch (err) {
     return Response.json({ error: err.message }, { status: 500 });
   }
+}
+
+function formatDuration(ms) {
+  const m = Math.floor(ms / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  return `${m}:${s.toString().padStart(2, "0")}`;
 }
