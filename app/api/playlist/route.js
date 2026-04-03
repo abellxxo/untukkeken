@@ -1,3 +1,5 @@
+import { getServerSession } from "next-auth";
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const playlistId = searchParams.get("id");
@@ -7,23 +9,11 @@ export async function GET(request) {
   }
 
   try {
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-
-    const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
-      },
-      body: "grant_type=client_credentials",
-    });
-
-    const tokenData = await tokenRes.json();
-    const accessToken = tokenData.access_token;
+    const session = await getServerSession();
+    const accessToken = session?.accessToken;
 
     if (!accessToken) {
-      return Response.json({ error: "Failed to get token" }, { status: 500 });
+      return Response.json({ error: "Not authenticated" }, { status: 401 });
     }
 
     const playlistRes = await fetch(
