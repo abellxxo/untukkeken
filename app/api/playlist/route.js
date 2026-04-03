@@ -1,4 +1,5 @@
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
@@ -9,7 +10,7 @@ export async function GET(request) {
   }
 
   try {
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     const accessToken = session?.accessToken;
 
     if (!accessToken) {
