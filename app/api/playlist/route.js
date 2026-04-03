@@ -32,7 +32,7 @@ export async function GET(request) {
     );
 
     const playlist = await playlistRes.json();
-
+    console.log("Spotify response:", JSON.stringify(playlist));
     const tracks = playlist.tracks.items
       .filter((item) => item.track)
       .map((item) => ({
