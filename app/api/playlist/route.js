@@ -29,6 +29,8 @@ export async function GET(request) {
     const playlist = await playlistRes.json();
     const tracksData = await tracksRes.json();
 
+    console.log("tracksData:", JSON.stringify(tracksData));
+
     const tracks = tracksData.items
       .filter((item) => item.track)
       .map((item) => ({

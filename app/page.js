@@ -16,7 +16,7 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   // === JANGAN LUPA GANTI TANGGAL JADIAN KALIAN DI SINI ===
-  const TARGET_DATE = "25-10-2025"; 
+  const TARGET_DATE = "okok"; 
 
   // Trik "Paksa" Autoplay Safari jalan pas halaman baru dibuka
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function LoginPage() {
       setErrorMsg("");
       router.push("/surprise"); 
     } else {
-      setErrorMsg("Ya ALLAH");
+      setErrorMsg("Sabaarrr, memang belum selesai");
     }
   };
 
