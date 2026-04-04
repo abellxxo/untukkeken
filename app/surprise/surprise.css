@@ -796,3 +796,183 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
+/* ── MASONRY GALLERY ── */
+.sp-masonry-wrap {
+  padding: 24px;
+  padding-bottom: 120px;
+}
+
+.sp-masonry {
+  columns: 3;
+  column-gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .sp-masonry { columns: 2; }
+}
+
+.sp-masonry-item {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.sp-masonry-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #1a1a1a;
+}
+
+.sp-masonry-skeleton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  animation: sp-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes sp-shimmer {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.sp-masonry-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: scale(1.04);
+}
+
+.sp-masonry-img.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sp-masonry-item:hover .sp-masonry-img {
+  transform: scale(1.04);
+}
+
+.sp-masonry-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(0,0,0,0) 50%, rgba(0,0,0,0.55) 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 12px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.sp-masonry-item:hover .sp-masonry-overlay {
+  opacity: 1;
+}
+
+.sp-masonry-item:hover .sp-masonry-img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  border: 2px solid var(--accent, #1DB954);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.sp-masonry-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 12px 12px;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+  letter-spacing: 0.3px;
+}
+
+/* ── LIGHTBOX ── */
+.sp-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: sp-lb-in 0.2s ease;
+}
+
+@keyframes sp-lb-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sp-lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 10000;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.sp-lightbox-close:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.sp-lightbox-inner {
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: sp-lb-scale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes sp-lb-scale {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.sp-lightbox-img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+}
+
+.sp-lightbox-caption {
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}

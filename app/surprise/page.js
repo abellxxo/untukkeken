@@ -6,12 +6,84 @@ import "./surprise.css";
 const PLAYLIST_ID = "3hBtJU9oHgkckXErVff3qM";
 
 const MONTHS = [
-  { id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a" },
-  { id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c" },
-  { id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d" },
-  { id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d" },
-  { id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20" },
-  { id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.", color: "#34d399", bg: "#0a2d1f" },
+  {
+    id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a",
+    photos: [
+      { src: "/photos/oct/1.jpg", w: 4, h: 5, caption: "awal mula 🍂" },
+      { src: "/photos/oct/2.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/3.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/4.jpg", w: 4, h: 3 },
+      { src: "/photos/oct/5.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/6.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/7.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/8.jpg", w: 3, h: 2 },
+    ]
+  },
+  {
+    id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c",
+    photos: [
+      { src: "/photos/nov/1.jpg", w: 3, h: 4 },
+      { src: "/photos/nov/2.jpg", w: 1, h: 1 },
+      { src: "/photos/nov/3.jpg", w: 4, h: 5 },
+      { src: "/photos/nov/4.jpg", w: 3, h: 2 },
+      { src: "/photos/nov/5.jpg", w: 1, h: 1 },
+      { src: "/photos/nov/6.jpg", w: 4, h: 3 },
+      { src: "/photos/nov/7.jpg", w: 3, h: 4 },
+      { src: "/photos/nov/8.jpg", w: 4, h: 5 },
+    ]
+  },
+  {
+    id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d",
+    photos: [
+      { src: "/photos/dec/1.jpg", w: 1, h: 1, caption: "holiday vibes ❄️" },
+      { src: "/photos/dec/2.jpg", w: 4, h: 5 },
+      { src: "/photos/dec/3.jpg", w: 3, h: 2 },
+      { src: "/photos/dec/4.jpg", w: 3, h: 4 },
+      { src: "/photos/dec/5.jpg", w: 4, h: 3 },
+      { src: "/photos/dec/6.jpg", w: 1, h: 1 },
+      { src: "/photos/dec/7.jpg", w: 3, h: 4 },
+      { src: "/photos/dec/8.jpg", w: 4, h: 5 },
+    ]
+  },
+  {
+    id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d",
+    photos: [
+      { src: "/photos/jan/1.jpg", w: 4, h: 3 },
+      { src: "/photos/jan/2.jpg", w: 3, h: 4 },
+      { src: "/photos/jan/3.jpg", w: 1, h: 1, caption: "new year 🌸" },
+      { src: "/photos/jan/4.jpg", w: 4, h: 5 },
+      { src: "/photos/jan/5.jpg", w: 3, h: 2 },
+      { src: "/photos/jan/6.jpg", w: 1, h: 1 },
+      { src: "/photos/jan/7.jpg", w: 4, h: 3 },
+      { src: "/photos/jan/8.jpg", w: 3, h: 4 },
+    ]
+  },
+  {
+    id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20",
+    photos: [
+      { src: "/photos/feb/1.jpg", w: 3, h: 4 },
+      { src: "/photos/feb/2.jpg", w: 4, h: 5, caption: "happy val 💕" },
+      { src: "/photos/feb/3.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/4.jpg", w: 3, h: 2 },
+      { src: "/photos/feb/5.jpg", w: 4, h: 3 },
+      { src: "/photos/feb/6.jpg", w: 3, h: 4 },
+      { src: "/photos/feb/7.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/8.jpg", w: 4, h: 5 },
+    ]
+  },
+  {
+    id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.", color: "#34d399", bg: "#0a2d1f",
+    photos: [
+      { src: "/photos/mar/1.jpg", w: 1, h: 1 },
+      { src: "/photos/mar/2.jpg", w: 4, h: 3 },
+      { src: "/photos/mar/3.jpg", w: 3, h: 4 },
+      { src: "/photos/mar/4.jpg", w: 4, h: 5, caption: "5 months 🌿" },
+      { src: "/photos/mar/5.jpg", w: 3, h: 2 },
+      { src: "/photos/mar/6.jpg", w: 1, h: 1 },
+      { src: "/photos/mar/7.jpg", w: 3, h: 4 },
+      { src: "/photos/mar/8.jpg", w: 4, h: 3 },
+    ]
+  },
 ];
 
 function formatTime(s) {
@@ -19,6 +91,85 @@ function formatTime(s) {
   const m = Math.floor(s / 60);
   const sec = Math.floor(s % 60);
   return `${m}:${sec.toString().padStart(2, "0")}`;
+}
+
+// Placeholder seeds per month so photos are visually distinct
+const MONTH_SEEDS = { oct: 10, nov: 20, dec: 30, jan: 40, feb: 50, mar: 60 };
+
+function MasonryGallery({ photos, accent, emoji, onOpen }) {
+  const [loaded, setLoaded] = useState({});
+  const [errored, setErrored] = useState({});
+
+  // Build placeholder URLs using picsum with per-month seed offset
+  const getPlaceholder = (idx, w, h) => {
+    const seed = idx * 7 + 1;
+    const pw = Math.round(400 * (w / Math.max(w, h)));
+    const ph = Math.round(400 * (h / Math.max(w, h)));
+    return `https://picsum.photos/seed/${seed}/${pw}/${ph}`;
+  };
+
+  const items = photos.map((p, i) => ({
+    ...p,
+    placeholder: getPlaceholder(i + 1, p.w, p.h),
+    aspectPad: `${(p.h / p.w) * 100}%`,
+  }));
+
+  if (!items.length) {
+    return (
+      <div className="sp-photo-empty">
+        <div className="sp-photo-empty-icon">{emoji}</div>
+        <div className="sp-photo-empty-text">No photos yet</div>
+        <div className="sp-photo-empty-sub">Photos will appear here</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="sp-masonry-wrap">
+      <div className="sp-masonry">
+        {items.map((photo, i) => {
+          const src = errored[i] ? photo.placeholder : photo.src;
+          const isLoaded = loaded[i];
+          return (
+            <div
+              key={i}
+              className="sp-masonry-item"
+              style={{ "--accent": accent }}
+              onClick={() => onOpen({ src: errored[i] ? photo.placeholder : photo.src, caption: photo.caption })}
+            >
+              <div className="sp-masonry-img-wrap" style={{ paddingBottom: photo.aspectPad }}>
+                {!isLoaded && (
+                  <div className="sp-masonry-skeleton" style={{ background: accent + "22" }}>
+                    <span style={{ fontSize: 24, opacity: 0.4 }}>{emoji}</span>
+                  </div>
+                )}
+                <img
+                  src={photo.src}
+                  alt={photo.caption || `memory ${i + 1}`}
+                  className={`sp-masonry-img${isLoaded ? " loaded" : ""}`}
+                  onLoad={() => setLoaded(l => ({ ...l, [i]: true }))}
+                  onError={(e) => {
+                    // fallback to picsum placeholder
+                    setErrored(er => ({ ...er, [i]: true }));
+                    e.target.src = photo.placeholder;
+                    setLoaded(l => ({ ...l, [i]: true }));
+                  }}
+                />
+                {photo.caption && (
+                  <div className="sp-masonry-caption">{photo.caption}</div>
+                )}
+                <div className="sp-masonry-overlay" style={{ "--accent": accent }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="rgba(255,255,255,0.9)">
+                    <path d="M15 3a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V5.414l-4.293 4.293a1 1 0 0 1-1.414-1.414L19.586 4H16a1 1 0 0 1-1-1zM3 9a1 1 0 0 1 1 1v3.586l4.293-4.293a1 1 0 0 1 1.414 1.414L5.414 15H9a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default function SurprisePage() {
@@ -38,6 +189,7 @@ export default function SurprisePage() {
   const [sdkReady, setSdkReady] = useState(false);
   const [hoveredTrack, setHoveredTrack] = useState(null);
   const [usingPreview, setUsingPreview] = useState(false);
+  const [lightbox, setLightbox] = useState(null); // { src, caption }
 
   const [isDragging, setIsDragging] = useState(false);
   const isDraggingRef = useRef(false);
@@ -481,12 +633,12 @@ export default function SurprisePage() {
                     )}
                   </>
                 ) : (
-                  <div className="sp-photo-grid">
-                    <div className="sp-photo-empty">
-                      <div className="sp-photo-empty-icon">{activePlaylist.emoji}</div>
-                      <div className="sp-photo-empty-text">Add your photos here</div>
-                    </div>
-                  </div>
+                  <MasonryGallery
+                    photos={activePlaylist.photos || []}
+                    accent={activePlaylist.color}
+                    emoji={activePlaylist.emoji}
+                    onOpen={(photo) => setLightbox(photo)}
+                  />
                 )}
               </div>
             </div>
@@ -564,6 +716,21 @@ export default function SurprisePage() {
                 else if (player) await player.setVolume(parseFloat(e.target.value));
               }}
             />
+          </div>
+        </div>
+      )}
+
+      {/* ── LIGHTBOX ── */}
+      {lightbox && (
+        <div className="sp-lightbox" onClick={() => setLightbox(null)}>
+          <button className="sp-lightbox-close" onClick={() => setLightbox(null)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.707 5.293a1 1 0 0 0-1.414 0L12 10.586 6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 1 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 0 0 0-1.414z"/>
+            </svg>
+          </button>
+          <div className="sp-lightbox-inner" onClick={e => e.stopPropagation()}>
+            <img src={lightbox.src} alt={lightbox.caption || ""} className="sp-lightbox-img" />
+            {lightbox.caption && <p className="sp-lightbox-caption">{lightbox.caption}</p>}
           </div>
         </div>
       )}
