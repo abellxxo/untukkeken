@@ -76,16 +76,13 @@ export default function SurprisePage() {
         });
         setIsPlaying(!state.paused);
         setDuration(state.duration / 1000);
-
         if (!isDraggingRef.current) {
           setProgress(state.position / 1000);
         }
       });
 
       p.connect().then((success) => {
-        if (!success) {
-          setUsingPreview(true);
-        }
+        if (!success) setUsingPreview(true);
       });
       setPlayer(p);
     };
@@ -102,7 +99,6 @@ export default function SurprisePage() {
     };
   }, [session?.accessToken]);
 
-  // Preview audio fallback
   useEffect(() => {
     if (!usingPreview) return;
     const audio = new Audio();
@@ -164,22 +160,15 @@ export default function SurprisePage() {
 
   const playSong = async (song) => {
     if (usingPreview || !deviceId) {
-      // fallback: play preview
       if (!song.preview_url) return;
       const audio = audioRef.current;
       if (!audio) return;
       audio.src = song.preview_url;
       audio.play();
       setIsPlaying(true);
-      setCurrentSong({
-        id: song.id,
-        name: song.name,
-        artists: song.artists,
-        cover: song.cover,
-      });
+      setCurrentSong({ id: song.id, name: song.name, artists: song.artists, cover: song.cover });
       return;
     }
-
     if (!session?.accessToken) return;
     try {
       await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
@@ -202,13 +191,8 @@ export default function SurprisePage() {
     if (usingPreview) {
       const audio = audioRef.current;
       if (!audio) return;
-      if (isPlaying) {
-        audio.pause();
-        setIsPlaying(false);
-      } else {
-        audio.play();
-        setIsPlaying(true);
-      }
+      if (isPlaying) { audio.pause(); setIsPlaying(false); }
+      else { audio.play(); setIsPlaying(true); }
     } else {
       if (player) player.togglePlay();
     }
@@ -266,7 +250,29 @@ export default function SurprisePage() {
     return "Good evening";
   };
 
+  const useCounter = () => {
+  const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  useEffect(() => {
+    const start = new Date("2025-10-25T00:00:00");
+    const tick = () => {
+      const now = new Date();
+      const diff = now - start;
+      setTime({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / (1000 * 60)) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+};
+
   const openPlaylist = (p) => { setActivePlaylist(p); setView("playlist"); };
+  const { days, hours, minutes, seconds } = useCounter();
 
   const PlayIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
@@ -283,16 +289,10 @@ export default function SurprisePage() {
   const renderTrackNum = (song, i) => {
     const isCurrentSong = currentSong?.id === song.id;
     const isHovered = hoveredTrack === song.id;
-
     if (isCurrentSong) {
-      if (isHovered) {
-        return isPlaying ? <PauseIcon /> : <PlayIcon />;
-      }
-      return isPlaying
-        ? <span className="sp-eq"><span/><span/><span/></span>
-        : i + 1;
+      if (isHovered) return isPlaying ? <PauseIcon /> : <PlayIcon />;
+      return isPlaying ? <span className="sp-eq"><span/><span/><span/></span> : i + 1;
     }
-
     if (isHovered) return <PlayIcon />;
     return i + 1;
   };
@@ -314,28 +314,48 @@ export default function SurprisePage() {
 
   return (
     <div className="sp-app">
+
+      {/* ── SIDEBAR ── */}
       <div className="sp-sidebar">
         <div className="sp-sidebar-top">
           <div className="sp-logo">
-            <img src="/iconspotify.png" alt="logo" width={130} height={40} style={{ objectFit: "contain" }} />
+            <img src="/iconspotify.png" alt="logo" width={300} height={80} style={{ objectFit: "contain" }} />
           </div>
           <nav className="sp-nav">
             <button className={`sp-nav-item${view === "home" ? " active" : ""}`} onClick={() => setView("home")}>
-              <img src="/home-icon.png" alt="Home" width="20" height="20" style={{ objectFit: "contain" }} />
+              <img src="/home-icon.png" alt="Home" width="20" height="20" style={{ objectFit: "contain", transform: "translateY(-1px)" }} />
               <span style={{ transform: "translateY(1px)" }}>Home</span>
             </button>
           </nav>
         </div>
+
         <div className="sp-library">
-          <div className="sp-lib-title">Your Library</div>
+          <div className="sp-lib-title">Our Library</div>
           <div className="sp-lib-list">
             {allPlaylists.map(p => (
-              <button key={p.id} className={`sp-lib-item${activePlaylist?.id === p.id && view === "playlist" ? " active" : ""}`} onClick={() => openPlaylist(p)}>
-                <div className="sp-lib-thumb" style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden" }}>
-                  {p.cover ? <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} /> : p.emoji}
+              <button
+                key={p.id}
+                className={`sp-lib-item${activePlaylist?.id === p.id && view === "playlist" ? " active" : ""}`}
+                onClick={() => openPlaylist(p)}
+                onMouseEnter={() => setHoveredTrack(p.id)}
+                onMouseLeave={() => setHoveredTrack(null)}
+              >
+                <div className="sp-lib-thumb" style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden", position: "relative" }}>
+                  {p.cover
+                    ? <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} />
+                    : p.emoji}
+                  {hoveredTrack === p.id && (
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4 }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
+                        <path d="M7.05 3.606l13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"/>
+                      </svg>
+                    </div>
+                  )}
                 </div>
                 <div className="sp-lib-info">
-                  <div className="sp-lib-name">{p.name}</div>
+                  <div className="sp-lib-name" style={{ color: activePlaylist?.id === p.id && view === "playlist" ? "#1DB954" : "#fff" }}>
+                    {p.name}
+                  </div>
                   <div className="sp-lib-meta">{p.id === "ours" ? "Playlist" : "Memories"} • Us</div>
                 </div>
               </button>
@@ -343,12 +363,19 @@ export default function SurprisePage() {
           </div>
         </div>
       </div>
+      {/* ── END SIDEBAR ── */}
 
+      {/* ── MAIN ── */}
       <div className="sp-main">
         {view === "home" && (
           <div className="sp-home" style={{ overflowY: "auto", height: "100%" }}>
-            <div className="sp-home-header" style={{ background: "linear-gradient(180deg,#1a3a2a 0%,transparent 100%)" }}>
+            <div className="sp-home-header" style={{ background: "linear-gradient(180deg,#1a3a2a 0%,transparent 100%)", paddingTop:32 }}>
               <div className="sp-greeting">{greeting()}, Kenisha 💕</div>
+              <div style={{ background: "#1DB954", borderRadius: 9, padding: "14px 24px", marginBottom: 20, display: "block", whiteSpace: "nowrap", textAlign: "center" }}>
+  <span style={{ fontSize: 15, fontWeight: 400, color: "#fff" }}>
+    We've been together for {days} days, {hours} hours, {minutes} minutes & {seconds} seconds
+  </span>
+</div>
               <div className="sp-quick-grid">
                 {allPlaylists.slice(0, 6).map(p => (
                   <button key={p.id} className="sp-quick-card" onClick={() => openPlaylist(p)}>
@@ -388,18 +415,23 @@ export default function SurprisePage() {
         {view === "playlist" && activePlaylist && (
           <div className="sp-playlist-view" style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
             <div className="sp-playlist-top" style={{ flexShrink: 0 }}>
-              <div className="sp-playlist-hero" style={{ background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)`, padding: "60px 24px 24px" }}>
+              <div
+                className="sp-playlist-hero"
+                style={{ background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)` }}
+              >
                 <button className="sp-back-btn" onClick={() => setView("home")}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z"/></svg>
                 </button>
                 <div className="sp-playlist-cover">
                   {activePlaylist.cover
-                    ? <img src={activePlaylist.cover} alt={activePlaylist.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
+                    ? <img src={activePlaylist.cover} alt={activePlaylist.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 9 }} />
                     : <span style={{ fontSize: 72 }}>{activePlaylist.emoji}</span>}
                 </div>
                 <div className="sp-playlist-meta">
                   <div className="sp-playlist-type">Playlist</div>
-                  <div className="sp-playlist-name">{activePlaylist.id === "ours" ? OUR_PLAYLIST.name : `${activePlaylist.name} Together`}</div>
+                  <div className="sp-playlist-name">
+                    {activePlaylist.id === "ours" ? OUR_PLAYLIST.name : `${activePlaylist.name} Together`}
+                  </div>
                   <div className="sp-playlist-sub">Ardit & Kenisha • {activePlaylist.desc}</div>
                 </div>
               </div>
@@ -432,18 +464,13 @@ export default function SurprisePage() {
                           key={song.id}
                           className={`sp-track-row${currentSong?.id === song.id ? " playing" : ""}`}
                           onClick={() => {
-                            if (currentSong?.id === song.id) {
-                              togglePlay();
-                            } else {
-                              playSong(song);
-                            }
+                            if (currentSong?.id === song.id) togglePlay();
+                            else playSong(song);
                           }}
                           onMouseEnter={() => setHoveredTrack(song.id)}
                           onMouseLeave={() => setHoveredTrack(null)}
                         >
-                          <span className="sp-track-num">
-                            {renderTrackNum(song, i)}
-                          </span>
+                          <span className="sp-track-num">{renderTrackNum(song, i)}</span>
                           <div className="sp-track-info">
                             <div className="sp-track-title" style={{ color: currentSong?.id === song.id ? "#1DB954" : "#fff" }}>{song.name}</div>
                             <div className="sp-track-artist">{song.artists}</div>
@@ -466,7 +493,9 @@ export default function SurprisePage() {
           </div>
         )}
       </div>
+      {/* ── END MAIN ── */}
 
+      {/* ── PLAYER ── */}
       {currentSong && (
         <div className="sp-player">
           <div className="sp-player-left">
@@ -525,27 +554,20 @@ export default function SurprisePage() {
               max="1"
               step="0.01"
               value={volume}
-              onChange={(e) => {
-                setVolume(parseFloat(e.target.value));
-              }}
+              onChange={(e) => setVolume(parseFloat(e.target.value))}
               onMouseUp={async (e) => {
-                if (usingPreview && audioRef.current) {
-                  audioRef.current.volume = parseFloat(e.target.value);
-                } else if (player) {
-                  await player.setVolume(parseFloat(e.target.value));
-                }
+                if (usingPreview && audioRef.current) audioRef.current.volume = parseFloat(e.target.value);
+                else if (player) await player.setVolume(parseFloat(e.target.value));
               }}
               onTouchEnd={async (e) => {
-                if (usingPreview && audioRef.current) {
-                  audioRef.current.volume = parseFloat(e.target.value);
-                } else if (player) {
-                  await player.setVolume(parseFloat(e.target.value));
-                }
+                if (usingPreview && audioRef.current) audioRef.current.volume = parseFloat(e.target.value);
+                else if (player) await player.setVolume(parseFloat(e.target.value));
               }}
             />
           </div>
         </div>
       )}
+
     </div>
   );
 }

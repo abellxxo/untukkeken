@@ -56,7 +56,7 @@
 
 .sp-sidebar-top {
   background: #121212;
-  border-radius: 9px; /* DIUBAH KE 9px */
+  border-radius: 9px;
   padding: 16px;
 }
 
@@ -92,16 +92,24 @@
   width: 100%;
   text-align: left;
   transition: color 0.1s;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
 }
 
-.sp-nav-item:hover, .sp-nav-item.active {
+.sp-nav-item:hover {
   color: #fff;
   background: #1a1a1a;
 }
 
+.sp-nav-item.active {
+  color: #fff;
+  background: none;
+}
+
 .sp-library {
   background: #121212;
-  border-radius: 9px; /* DIUBAH KE 9px */
+  border-radius: 9px;
   padding: 16px;
   flex: 1;
   overflow-y: auto;
@@ -160,11 +168,22 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 .sp-lib-meta {
   font-size: 12px;
   color: #b3b3b3;
   margin-top: 2px;
+}
+
+.sp-lib-item .sp-lib-name {
+  color: #b3b3b3;
+}
+
+.sp-lib-item:hover .sp-lib-name {
+  color: #fff;
+}
+
+.sp-lib-item.active .sp-lib-name {
+  color: #1DB954;
 }
 
 .sp-main {
@@ -174,8 +193,8 @@
   background: #121212;
   display: flex;
   flex-direction: column;
-  border-radius: 9px; /* DITAMBAH 9px */
-  margin: 8px 8px 8px 0; /* DITAMBAH: Margin presisi agar rata kiri, kanan, atas, bawah */
+  border-radius: 9px;
+  margin: 8px 8px 8px 0;
 }
 
 .sp-home {
@@ -183,7 +202,7 @@
 }
 
 .sp-home-header {
-  padding: 32px 24px 24px;
+  padding: 80px 24px 24px;
 }
 
 .sp-greeting {
@@ -281,7 +300,7 @@
 
 .sp-card {
   background: #181818;
-  border-radius: 8px;
+  border-radius: 9px;
   padding: 16px;
   cursor: pointer;
   border: none;
@@ -303,7 +322,7 @@
 .sp-card-img {
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 4px;
+  border-radius: 9px;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -354,17 +373,19 @@
   height: 100%;
 }
 
+/* ── HERO: horizontal layout ── */
 .sp-playlist-hero {
-  padding: 80px 24px 24px;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 75px 24px 24px;
   position: relative;
 }
 
 .sp-back-btn {
   position: absolute;
-  top: 24px;
+  top: 16px;
   left: 24px;
   width: 32px;
   height: 32px;
@@ -379,15 +400,24 @@
   z-index: 20;
 }
 
+/* Cover persegi di kiri */
 .sp-playlist-cover {
-  width: 220px;
-  height: 220px;
+  width: 240px;
+  height: 240px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
+/* Meta teks rata bawah di kanan cover */
+.sp-playlist-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 4px;
 }
 
 .sp-playlist-type {
@@ -399,7 +429,7 @@
 }
 
 .sp-playlist-name {
-  font-size: 42px;
+  font-size: 72px;
   font-weight: 900;
   line-height: 1.1;
 }
@@ -439,7 +469,6 @@
   padding: 0 24px 120px;
 }
 
-/* HEADER TRACKLIST: DIBUAT STICKY */
 .sp-track-header {
   display: grid;
   grid-template-columns: 40px 1fr 80px;
@@ -453,7 +482,7 @@
   margin-bottom: 8px;
   position: sticky;
   top: 0;
-  background: #121212; 
+  background: #121212;
   z-index: 10;
 }
 
