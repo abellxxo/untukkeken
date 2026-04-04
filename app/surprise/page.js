@@ -37,10 +37,12 @@ export default function SurprisePage() {
   const [deviceId, setDeviceId] = useState(null);
   const [sdkReady, setSdkReady] = useState(false);
   const [hoveredTrack, setHoveredTrack] = useState(null);
+  const [usingPreview, setUsingPreview] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
   const isDraggingRef = useRef(false);
   const progressInterval = useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     if (!session?.accessToken) return;
@@ -55,6 +57,12 @@ export default function SurprisePage() {
       p.addListener("ready", ({ device_id }) => {
         setDeviceId(device_id);
         setSdkReady(true);
+        setUsingPreview(false);
+      });
+
+      p.addListener("not_ready", () => {
+        setSdkReady(false);
+        setUsingPreview(true);
       });
 
       p.addListener("player_state_changed", (state) => {
@@ -74,13 +82,18 @@ export default function SurprisePage() {
         }
       });
 
-      p.connect();
+      p.connect().then((success) => {
+        if (!success) {
+          setUsingPreview(true);
+        }
+      });
       setPlayer(p);
     };
 
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
     script.async = true;
+    script.onerror = () => setUsingPreview(true);
     document.body.appendChild(script);
 
     return () => {
@@ -89,8 +102,32 @@ export default function SurprisePage() {
     };
   }, [session?.accessToken]);
 
+  // Preview audio fallback
   useEffect(() => {
-    if (isPlaying && !isDragging) {
+    if (!usingPreview) return;
+    const audio = new Audio();
+    audio.volume = volume;
+    audioRef.current = audio;
+
+    audio.addEventListener("timeupdate", () => {
+      if (!isDraggingRef.current) setProgress(audio.currentTime);
+    });
+    audio.addEventListener("durationchange", () => {
+      setDuration(audio.duration);
+    });
+    audio.addEventListener("ended", () => {
+      setIsPlaying(false);
+      setProgress(0);
+    });
+
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, [usingPreview]);
+
+  useEffect(() => {
+    if (isPlaying && !isDragging && !usingPreview) {
       progressInterval.current = setInterval(async () => {
         if (player) {
           const state = await player.getCurrentState();
@@ -103,7 +140,7 @@ export default function SurprisePage() {
       clearInterval(progressInterval.current);
     }
     return () => clearInterval(progressInterval.current);
-  }, [isPlaying, player, isDragging]);
+  }, [isPlaying, player, isDragging, usingPreview]);
 
   useEffect(() => {
     if (!session?.accessToken) return;
@@ -126,7 +163,24 @@ export default function SurprisePage() {
   };
 
   const playSong = async (song) => {
-    if (!deviceId || !session?.accessToken) return;
+    if (usingPreview || !deviceId) {
+      // fallback: play preview
+      if (!song.preview_url) return;
+      const audio = audioRef.current;
+      if (!audio) return;
+      audio.src = song.preview_url;
+      audio.play();
+      setIsPlaying(true);
+      setCurrentSong({
+        id: song.id,
+        name: song.name,
+        artists: song.artists,
+        cover: song.cover,
+      });
+      return;
+    }
+
+    if (!session?.accessToken) return;
     try {
       await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
         method: "PUT",
@@ -144,14 +198,48 @@ export default function SurprisePage() {
     }
   };
 
-  const togglePlay = () => { if (player) player.togglePlay(); };
-  const skipNext = () => { if (player) player.nextTrack(); };
-  const skipPrev = () => { if (player) player.previousTrack(); };
+  const togglePlay = () => {
+    if (usingPreview) {
+      const audio = audioRef.current;
+      if (!audio) return;
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        audio.play();
+        setIsPlaying(true);
+      }
+    } else {
+      if (player) player.togglePlay();
+    }
+  };
+
+  const skipNext = () => {
+    if (usingPreview) {
+      const idx = ourSongs.findIndex((s) => s.id === currentSong?.id);
+      const next = ourSongs[idx + 1];
+      if (next) playSong(next);
+    } else {
+      if (player) player.nextTrack();
+    }
+  };
+
+  const skipPrev = () => {
+    if (usingPreview) {
+      const idx = ourSongs.findIndex((s) => s.id === currentSong?.id);
+      const prev = ourSongs[idx - 1];
+      if (prev) playSong(prev);
+    } else {
+      if (player) player.previousTrack();
+    }
+  };
 
   const handleSeekEnd = async (e) => {
     const val = parseFloat(e.target.value);
-    if (player) {
-      await player.seek(Math.round(val * 1000));
+    if (usingPreview) {
+      if (audioRef.current) audioRef.current.currentTime = val;
+    } else {
+      if (player) await player.seek(Math.round(val * 1000));
     }
     setTimeout(() => {
       setIsDragging(false);
@@ -248,7 +336,6 @@ export default function SurprisePage() {
                 </div>
                 <div className="sp-lib-info">
                   <div className="sp-lib-name">{p.name}</div>
-                  {/* INI BAGIAN YANG DIUBAH */}
                   <div className="sp-lib-meta">{p.id === "ours" ? "Playlist" : "Memories"} • Us</div>
                 </div>
               </button>
@@ -330,7 +417,6 @@ export default function SurprisePage() {
 
             <div className="sp-playlist-scroll" style={{ flex: 1, overflowY: "auto" }}>
               <div className="sp-tracklist" style={{ padding: "0 24px 120px" }}>
-
                 {activePlaylist.id === "ours" ? (
                   <>
                     <div className="sp-track-header" style={{ position: "sticky", top: 0, background: "#121212", zIndex: 10 }}>
@@ -399,20 +485,17 @@ export default function SurprisePage() {
               <button className="sp-ctrl" onClick={skipPrev}>
                 <img src="/back.png" alt="Previous" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />
               </button>
-
               <button className="sp-play-pause" onClick={togglePlay}>
                 {isPlaying
                   ? <img src="/Pause.png" alt="Pause" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />
                   : <img src="/Play.png" alt="Play" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />}
               </button>
-
               <button className="sp-ctrl" onClick={skipNext}>
                 <img src="/fwd.png" alt="Next" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />
               </button>
             </div>
             <div className="sp-progress-row">
               <span className="sp-time">{formatTime(progress)}</span>
-
               <input
                 type="range"
                 className="sp-slider-input"
@@ -429,13 +512,11 @@ export default function SurprisePage() {
                 onTouchEnd={handleSeekEnd}
                 style={{ "--val": `${duration ? (progress / duration) * 100 : 0}%` }}
               />
-
               <span className="sp-time">{formatTime(duration)}</span>
             </div>
           </div>
           <div className="sp-player-right">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#b3b3b3"><path d="M13 3a1 1 0 1 0-2 0v1.07A8.002 8.002 0 0 0 4.07 12H3a1 1 0 1 0 0 2h1.07A8.002 8.002 0 0 0 11 21.93V23a1 1 0 1 0 2 0v-1.07A8.002 8.002 0 0 0 19.93 14H21a1 1 0 1 0 0-2h-1.07A8.002 8.002 0 0 0 13 4.07V3z"/></svg>
-
             <input
               type="range"
               className="sp-slider-input"
@@ -448,10 +529,18 @@ export default function SurprisePage() {
                 setVolume(parseFloat(e.target.value));
               }}
               onMouseUp={async (e) => {
-                if (player) await player.setVolume(parseFloat(e.target.value));
+                if (usingPreview && audioRef.current) {
+                  audioRef.current.volume = parseFloat(e.target.value);
+                } else if (player) {
+                  await player.setVolume(parseFloat(e.target.value));
+                }
               }}
               onTouchEnd={async (e) => {
-                if (player) await player.setVolume(parseFloat(e.target.value));
+                if (usingPreview && audioRef.current) {
+                  audioRef.current.volume = parseFloat(e.target.value);
+                } else if (player) {
+                  await player.setVolume(parseFloat(e.target.value));
+                }
               }}
             />
           </div>
