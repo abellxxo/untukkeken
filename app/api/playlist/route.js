@@ -29,26 +29,8 @@ export async function GET(request) {
     const playlist = await playlistRes.json();
     const tracksData = await tracksRes.json();
 
-    console.log("tracksData:", JSON.stringify(tracksData));
+    return Response.json({ debugPlaylist: playlist, debugTracks: tracksData });
 
-    const tracks = tracksData.items
-      .filter((item) => item.track)
-      .map((item) => ({
-        id: item.track.id,
-        name: item.track.name,
-        artists: item.track.artists.map((a) => a.name).join(", "),
-        duration: formatDuration(item.track.duration_ms),
-        preview_url: item.track.preview_url,
-        cover: item.track.album?.images?.[1]?.url || item.track.album?.images?.[0]?.url || null,
-      }));
-
-    const info = {
-      name: playlist.name,
-      description: playlist.description,
-      cover: playlist.images?.[0]?.url || null,
-    };
-
-    return Response.json({ tracks, info });
   } catch (err) {
     return Response.json({ error: err.message }, { status: 500 });
   }
