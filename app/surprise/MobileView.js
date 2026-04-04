@@ -127,7 +127,7 @@ function MasonryGallery({ photos, accent, emoji, onOpen }) {
 
 export default function MobileView() {
   const { data: session, status } = useSession();
-  const [view, setView] = useState("home"); // home | playlist | search | library
+  const [view, setView] = useState("home"); // home | playlist | library
   const [activePlaylist, setActivePlaylist] = useState(null);
   const [ourSongs, setOurSongs] = useState([]);
   const [ourPlaylistInfo, setOurPlaylistInfo] = useState(null);
@@ -249,14 +249,29 @@ export default function MobileView() {
     } catch (e) { console.error(e); }
   };
 
-  const togglePlay = () => {
+const togglePlay = async () => {
     if (usingPreview) {
       const audio = audioRef.current;
       if (!audio) return;
       if (isPlaying) { audio.pause(); setIsPlaying(false); }
       else { audio.play(); setIsPlaying(true); }
     } else {
-      if (player) player.togglePlay();
+      if (!session?.accessToken) return;
+      try {
+        // Tembak REST API Spotify langsung (jauh lebih stabil dari bawaan SDK)
+        const endpoint = isPlaying ? "pause" : "play";
+        await fetch(`https://api.spotify.com/v1/me/player/${endpoint}`, {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${session.accessToken}` }
+        });
+        
+        // Bikin tombol kerasa instan responsif
+        setIsPlaying(!isPlaying); 
+      } catch (e) {
+        console.error("Gagal toggle play via API", e);
+        // Fallback panggil SDK kalau koneksi API sedang bermasalah
+        if (player) player.togglePlay(); 
+      }
     }
   };
 
@@ -287,9 +302,9 @@ export default function MobileView() {
 
   const greeting = () => {
     const h = new Date().getHours();
-    if (h < 12) return "Good morning";
-    if (h < 17) return "Good afternoon";
-    return "Good evening";
+    if (h < 12) return "Good morning, Kenisha";
+    if (h < 17) return "Good afternoon, Sayang";
+    return "Good evening, Bb";
   };
 
   const useCounter = () => {
@@ -346,15 +361,6 @@ export default function MobileView() {
 
   return (
     <div className="m-app">
-
-      {/* ── STATUS BAR ── */}
-      <div className="m-status-bar">
-        <span className="m-status-time">
-          {new Date().getHours()}:{String(new Date().getMinutes()).padStart(2, "0")}
-        </span>
-        <img src="/Stats.svg" alt="" className="m-status-icons" />
-      </div>
-
       {/* ── SCROLLABLE CONTENT ── */}
       <div className="m-scroll">
 
@@ -366,24 +372,6 @@ export default function MobileView() {
               <div className="m-home-top">
                 <h1 className="m-greeting">{greeting()}</h1>
                 <div className="m-home-icons">
-                  {/* Bell */}
-                  <button className="m-icon-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                    </svg>
-                  </button>
-                  {/* Recent */}
-                  <button className="m-icon-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                  </button>
-                  {/* Settings */}
-                  <button className="m-icon-btn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                    </svg>
-                  </button>
                 </div>
               </div>
 
@@ -475,25 +463,6 @@ export default function MobileView() {
                     <div className="m-lib-name">{p.name}</div>
                     <div className="m-lib-meta">{p.id === "ours" ? "Playlist" : "Memories"} • Us</div>
                   </div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ══ SEARCH VIEW ══ */}
-        {view === "search" && (
-          <div className="m-search">
-            <h2 className="m-lib-title">Search</h2>
-            <div className="m-search-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b3b3b3" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              <span style={{ color: "#b3b3b3", fontSize: 15 }}>Artists, songs, or months</span>
-            </div>
-            <div className="m-search-grid">
-              {allPlaylists.map(p => (
-                <button key={p.id} className="m-search-card" style={{ background: p.bg || "#282828" }} onClick={() => openPlaylist(p)}>
-                  <span style={{ fontSize: 28 }}>{p.emoji}</span>
-                  <span className="m-search-card-name">{p.name}</span>
                 </button>
               ))}
             </div>
@@ -596,14 +565,6 @@ export default function MobileView() {
               <div className="m-mini-artist">{currentSong.artists}</div>
             </div>
             <div className="m-mini-controls">
-              {/* Device icon */}
-              <button className="m-mini-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
-              </button>
-              {/* Heart */}
-              <button className="m-mini-btn">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DB954"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              </button>
               {/* Play/Pause */}
               <button className="m-mini-btn" onClick={togglePlay}>
                 {isPlaying
@@ -620,10 +581,6 @@ export default function MobileView() {
         <button className={`m-nav-item${view === "home" ? " active" : ""}`} onClick={() => setView("home")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
           <span>Home</span>
-        </button>
-        <button className={`m-nav-item${view === "search" ? " active" : ""}`} onClick={() => setView("search")}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <span>Search</span>
         </button>
         <button className={`m-nav-item${view === "library" ? " active" : ""}`} onClick={() => setView("library")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm6 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4zm7-1a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-2z"/></svg>

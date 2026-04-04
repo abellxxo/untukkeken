@@ -2,43 +2,33 @@
    Mobile.css — Spotify iPhone Style
    ═══════════════════════════════════ */
 
+/* --- STEP 1: Tambahkan ini untuk mengunci Safari --- */
+html, body {
+  background-color: #000;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overscroll-behavior-y: none;
+  overflow: hidden;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 .m-app {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
+  
+  /* --- STEP 2: Ubah ini (height 100dvh & position relative dihapus) --- */
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
   background: #121212;
   color: #fff;
   font-family: 'SpotifyMix', 'Circular Std', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   overflow: hidden;
-  position: relative;
-}
-
-/* ── STATUS BAR ── */
-.m-status-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 13px 20px 0;
-  flex-shrink: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-}
-
-.m-status-time {
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  font-family: 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
-
-.m-status-icons {
-  height: 11px;
-  width: auto;
 }
 
 /* ── SCROLL CONTAINER ── */
@@ -72,25 +62,9 @@
 
 .m-greeting {
   font-size: 24px;
-  font-weight: 900;
+  font-weight: 400;
   color: #fff;
   letter-spacing: -0.5px;
-}
-
-.m-home-icons {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.m-icon-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
 }
 
 /* Quick 2-col grid */
@@ -181,12 +155,25 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  padding-bottom: 8px;
+  /* Tambahkan padding kiri-kanan 16px, bawah 8px */
+  padding: 0 16px 8px 16px; 
+  /* Margin negatif untuk menarik container ke paling ujung layar */
+  margin: 0 -16px; 
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  /* (Opsional) Tambahkan scroll-snap biar berhentinya pas di tengah/awal kartu */
+  scroll-snap-type: x mandatory;
 }
 
 .m-cards-scroll::-webkit-scrollbar { display: none; }
+
+/* Tambahkan sedikit ruang kosong semu di paling akhir biar kartu terakhir 
+   tidak nempel banget di ujung kanan saat di-scroll mentok di HP tertentu */
+.m-cards-scroll::after {
+  content: "";
+  width: 4px;
+  flex-shrink: 0;
+}
 
 .m-card {
   flex-shrink: 0;
@@ -199,6 +186,8 @@
   color: #fff;
   cursor: pointer;
   transition: background 0.15s;
+  /* Bikin tiap kartu jadi titik perhentian yang rapi saat di-scroll */
+  scroll-snap-align: start; 
 }
 
 .m-card:active { background: #282828; }
@@ -376,54 +365,6 @@
   font-size: 12px;
   color: #b3b3b3;
   margin-top: 2px;
-}
-
-/* ═══════════════
-   SEARCH VIEW
-   ═══════════════ */
-.m-search {
-  padding: 52px 16px 24px;
-}
-
-.m-search-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #fff;
-  border-radius: 6px;
-  padding: 12px 14px;
-  margin-bottom: 24px;
-}
-
-.m-search-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.m-search-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  border-radius: 8px;
-  padding: 14px;
-  border: none;
-  cursor: pointer;
-  aspect-ratio: 1.6;
-  overflow: hidden;
-  position: relative;
-  transition: opacity 0.15s;
-}
-
-.m-search-card:active { opacity: 0.85; }
-
-.m-search-card-name {
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  align-self: flex-start;
 }
 
 /* ═══════════════
