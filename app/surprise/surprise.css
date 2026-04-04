@@ -976,3 +976,345 @@
   font-weight: 400;
   letter-spacing: 0.3px;
 }
+/* ════════════════════════════════════════
+   MOBILE RESPONSIVE — Spotify iPhone style
+   ════════════════════════════════════════ */
+
+/* Hide mobile nav on desktop */
+.sp-mobile-nav {
+  display: none;
+}
+
+/* Hide mobile sheet on desktop */
+.sp-mobile-sheet-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  /* ── ROOT LAYOUT ── */
+  .sp-app {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto auto;
+    height: 100dvh;
+  }
+
+  /* Hide desktop sidebar on mobile */
+  .sp-sidebar {
+    display: none;
+  }
+
+  /* Main takes full width */
+  .sp-main {
+    grid-column: 1;
+    margin: 0;
+    border-radius: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* leave space for player + bottom nav */
+    padding-bottom: 0;
+  }
+
+  /* ── PLAYER (mobile: compact bar, no progress/volume) ── */
+  .sp-player {
+    grid-column: 1;
+    height: 68px;
+    padding: 0 12px;
+    border-top: 1px solid #282828;
+    border-bottom: none;
+  }
+
+  .sp-player-center {
+    display: none;
+  }
+
+  .sp-player-right {
+    display: none;
+  }
+
+  .sp-player-left {
+    flex: 1;
+    gap: 10px;
+  }
+
+  .sp-player-thumb {
+    width: 44px;
+    height: 44px;
+  }
+
+  .sp-player-title {
+    font-size: 13px;
+  }
+
+  .sp-player-artist {
+    font-size: 11px;
+  }
+
+  /* Show play/pause only on mobile player right side */
+  .sp-player::after {
+    content: none;
+  }
+
+  /* Mobile-only play controls inline with player */
+  .sp-player-mobile-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .sp-mobile-nav {
+    display: flex;
+    grid-column: 1;
+    background: #0a0a0a;
+    border-top: 1px solid #282828;
+    height: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 100;
+  }
+
+  .sp-mobile-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #b3b3b3;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'SpotifyMix', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    padding: 8px 0;
+    transition: color 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sp-mobile-nav-item.active {
+    color: #fff;
+  }
+
+  .sp-mobile-nav-item img {
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  .sp-mobile-nav-item.active img {
+    opacity: 1;
+  }
+
+  .sp-mobile-nav-item svg {
+    opacity: 0.6;
+    transition: opacity 0.15s;
+  }
+
+  .sp-mobile-nav-item.active svg {
+    opacity: 1;
+    color: #fff;
+  }
+
+  /* ── MOBILE LIBRARY BOTTOM SHEET ── */
+  .sp-mobile-sheet-overlay {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(0,0,0,0.6);
+    align-items: flex-end;
+    animation: sp-overlay-in 0.2s ease;
+  }
+
+  @keyframes sp-overlay-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .sp-mobile-sheet {
+    width: 100%;
+    background: #1a1a1a;
+    border-radius: 16px 16px 0 0;
+    padding: 12px 0 calc(16px + env(safe-area-inset-bottom));
+    max-height: 75vh;
+    overflow-y: auto;
+    animation: sp-sheet-in 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  @keyframes sp-sheet-in {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+
+  .sp-mobile-sheet-handle {
+    width: 36px;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+
+  /* ── HOME ── */
+  .sp-home-header {
+    padding: 52px 16px 16px;
+  }
+
+  .sp-greeting {
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+
+  /* Counter — allow wrap on mobile */
+  .sp-home-header > div[style] {
+    white-space: normal !important;
+  }
+
+  .sp-quick-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .sp-quick-thumb {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .sp-quick-name {
+    font-size: 12px;
+    padding: 0 6px;
+  }
+
+  .sp-section {
+    padding: 0 16px 24px;
+  }
+
+  .sp-section-title {
+    font-size: 18px;
+  }
+
+  .sp-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .sp-card {
+    padding: 12px;
+  }
+
+  .sp-card-title {
+    font-size: 13px;
+  }
+
+  /* ── PLAYLIST HERO ── */
+  .sp-playlist-hero {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px 20px;
+    gap: 16px;
+  }
+
+  .sp-playlist-cover {
+    width: 160px;
+    height: 160px;
+  }
+
+  .sp-playlist-cover span {
+    font-size: 52px !important;
+  }
+
+  .sp-playlist-name {
+    font-size: 36px;
+  }
+
+  .sp-playlist-meta {
+    align-items: center;
+  }
+
+  .sp-playlist-sub {
+    font-size: 13px;
+  }
+
+  /* ── TRACK LIST ── */
+  .sp-tracklist {
+    padding: 0 12px 140px !important;
+  }
+
+  .sp-track-title {
+    font-size: 14px;
+  }
+
+  /* ── MASONRY ── */
+  .sp-masonry {
+    columns: 2;
+    column-gap: 8px;
+  }
+
+  .sp-masonry-wrap {
+    padding: 12px;
+    padding-bottom: 140px;
+  }
+
+  .sp-masonry-item {
+    margin-bottom: 8px;
+  }
+
+  /* On mobile, always show overlay (no hover) */
+  .sp-masonry-overlay {
+    opacity: 0;
+  }
+
+  /* ── LIGHTBOX ── */
+  .sp-lightbox-img {
+    max-width: 95vw;
+    max-height: 80vh;
+    border-radius: 8px;
+  }
+
+  .sp-lightbox-close {
+    top: 12px;
+    right: 16px;
+  }
+}
+
+/* ── VERY SMALL SCREENS ── */
+@media (max-width: 375px) {
+  .sp-quick-grid {
+    grid-template-columns: 1fr;
+  }
+  .sp-playlist-name {
+    font-size: 28px;
+  }
+}
+
+/* Hide mobile inline controls on desktop */
+.sp-player-mobile-controls {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sp-player-mobile-controls {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+}
+
+/* Counter bar */
+.sp-counter-bar {
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .sp-counter-bar {
+    white-space: normal;
+    padding: 12px 16px !important;
+  }
+  .sp-counter-bar span {
+    font-size: 13px !important;
+  }
+}

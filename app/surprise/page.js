@@ -9,7 +9,7 @@ const MONTHS = [
   {
     id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a",
     photos: [
-      { src: "/photos/oct/1.jpg", w: 4, h: 5, caption: "awal mula 🍂" },
+      { src: "/photos/oct/1.jpg", w: 4, h: 5 },
       { src: "/photos/oct/2.jpg", w: 3, h: 4 },
       { src: "/photos/oct/3.jpg", w: 1, h: 1 },
       { src: "/photos/oct/4.jpg", w: 4, h: 3 },
@@ -35,7 +35,7 @@ const MONTHS = [
   {
     id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d",
     photos: [
-      { src: "/photos/dec/1.jpg", w: 1, h: 1, caption: "holiday vibes ❄️" },
+      { src: "/photos/dec/1.jpg", w: 1, h: 1 },
       { src: "/photos/dec/2.jpg", w: 4, h: 5 },
       { src: "/photos/dec/3.jpg", w: 3, h: 2 },
       { src: "/photos/dec/4.jpg", w: 3, h: 4 },
@@ -50,7 +50,7 @@ const MONTHS = [
     photos: [
       { src: "/photos/jan/1.jpg", w: 4, h: 3 },
       { src: "/photos/jan/2.jpg", w: 3, h: 4 },
-      { src: "/photos/jan/3.jpg", w: 1, h: 1, caption: "new year 🌸" },
+      { src: "/photos/jan/3.jpg", w: 1, h: 1 },
       { src: "/photos/jan/4.jpg", w: 4, h: 5 },
       { src: "/photos/jan/5.jpg", w: 3, h: 2 },
       { src: "/photos/jan/6.jpg", w: 1, h: 1 },
@@ -62,7 +62,7 @@ const MONTHS = [
     id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20",
     photos: [
       { src: "/photos/feb/1.jpg", w: 3, h: 4 },
-      { src: "/photos/feb/2.jpg", w: 4, h: 5, caption: "happy val 💕" },
+      { src: "/photos/feb/2.jpg", w: 4, h: 5 },
       { src: "/photos/feb/3.jpg", w: 1, h: 1 },
       { src: "/photos/feb/4.jpg", w: 3, h: 2 },
       { src: "/photos/feb/5.jpg", w: 4, h: 3 },
@@ -77,7 +77,7 @@ const MONTHS = [
       { src: "/photos/mar/1.jpg", w: 1, h: 1 },
       { src: "/photos/mar/2.jpg", w: 4, h: 3 },
       { src: "/photos/mar/3.jpg", w: 3, h: 4 },
-      { src: "/photos/mar/4.jpg", w: 4, h: 5, caption: "5 months 🌿" },
+      { src: "/photos/mar/4.jpg", w: 4, h: 5 },
       { src: "/photos/mar/5.jpg", w: 3, h: 2 },
       { src: "/photos/mar/6.jpg", w: 1, h: 1 },
       { src: "/photos/mar/7.jpg", w: 3, h: 4 },
@@ -190,11 +190,20 @@ export default function SurprisePage() {
   const [hoveredTrack, setHoveredTrack] = useState(null);
   const [usingPreview, setUsingPreview] = useState(false);
   const [lightbox, setLightbox] = useState(null); // { src, caption }
+  const [showMobileLibrary, setShowMobileLibrary] = useState(false);
 
   const [isDragging, setIsDragging] = useState(false);
   const isDraggingRef = useRef(false);
   const progressInterval = useRef(null);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
 
   useEffect(() => {
     if (!session?.accessToken) return;
@@ -467,7 +476,7 @@ export default function SurprisePage() {
   return (
     <div className="sp-app">
 
-      {/* ── SIDEBAR ── */}
+      {/* ── SIDEBAR (desktop only) ── */}
       <div className="sp-sidebar">
         <div className="sp-sidebar-top">
           <div className="sp-logo">
@@ -517,13 +526,44 @@ export default function SurprisePage() {
       </div>
       {/* ── END SIDEBAR ── */}
 
+      {/* ── MOBILE LIBRARY SHEET ── */}
+      {showMobileLibrary && (
+        <div className="sp-mobile-sheet-overlay" onClick={() => setShowMobileLibrary(false)}>
+          <div className="sp-mobile-sheet" onClick={e => e.stopPropagation()}>
+            <div className="sp-mobile-sheet-handle" />
+            <div className="sp-lib-title" style={{ padding: "0 16px 12px" }}>Our Library</div>
+            <div className="sp-lib-list" style={{ padding: "0 8px" }}>
+              {allPlaylists.map(p => (
+                <button
+                  key={p.id}
+                  className={`sp-lib-item${activePlaylist?.id === p.id && view === "playlist" ? " active" : ""}`}
+                  onClick={() => { openPlaylist(p); setShowMobileLibrary(false); }}
+                >
+                  <div className="sp-lib-thumb" style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden" }}>
+                    {p.cover
+                      ? <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 4 }} />
+                      : p.emoji}
+                  </div>
+                  <div className="sp-lib-info">
+                    <div className="sp-lib-name" style={{ color: activePlaylist?.id === p.id && view === "playlist" ? "#1DB954" : "#fff" }}>
+                      {p.name}
+                    </div>
+                    <div className="sp-lib-meta">{p.id === "ours" ? "Playlist" : "Memories"} • Us</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── MAIN ── */}
       <div className="sp-main">
         {view === "home" && (
           <div className="sp-home" style={{ overflowY: "auto", height: "100%" }}>
             <div className="sp-home-header" style={{ background: "linear-gradient(180deg,#1a3a2a 0%,transparent 100%)", paddingTop:32 }}>
               <div className="sp-greeting">{greeting()}, Kenisha 💕</div>
-              <div style={{ background: "#1DB954", borderRadius: 9, padding: "14px 24px", marginBottom: 20, display: "block", whiteSpace: "nowrap", textAlign: "center" }}>
+              <div className="sp-counter-bar" style={{ background: "#1DB954", borderRadius: 9, padding: "14px 24px", marginBottom: 20, display: "block", textAlign: "center" }}>
   <span style={{ fontSize: 15, fontWeight: 400, color: "#fff" }}>
     We've been together for {days} days, {hours} hours, {minutes} minutes & {seconds} seconds
   </span>
@@ -661,6 +701,20 @@ export default function SurprisePage() {
               <div className="sp-player-artist">{currentSong.artists}</div>
             </div>
           </div>
+          {/* Mobile-only inline controls */}
+          <div className="sp-player-mobile-controls">
+            <button className="sp-ctrl" onClick={skipPrev}>
+              <img src="/back.png" alt="Previous" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />
+            </button>
+            <button className="sp-play-pause" onClick={togglePlay}>
+              {isPlaying
+                ? <img src="/Pause.png" alt="Pause" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />
+                : <img src="/Play.png" alt="Play" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />}
+            </button>
+            <button className="sp-ctrl" onClick={skipNext}>
+              <img src="/fwd.png" alt="Next" width="18" height="18" style={{ objectFit: "contain", pointerEvents: "none" }} />
+            </button>
+          </div>
           <div className="sp-player-center">
             <div className="sp-player-controls">
               <button className="sp-ctrl" onClick={skipPrev}>
@@ -719,6 +773,26 @@ export default function SurprisePage() {
           </div>
         </div>
       )}
+
+      {/* ── MOBILE BOTTOM NAV ── */}
+      <nav className="sp-mobile-nav">
+        <button
+          className={`sp-mobile-nav-item${view === "home" ? " active" : ""}`}
+          onClick={() => { setView("home"); setShowMobileLibrary(false); }}
+        >
+          <img src="/home-icon.png" alt="Home" width="22" height="22" style={{ objectFit: "contain" }} />
+          <span>Home</span>
+        </button>
+        <button
+          className={`sp-mobile-nav-item${showMobileLibrary ? " active" : ""}`}
+          onClick={() => setShowMobileLibrary(v => !v)}
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm6 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4zm7-1a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-2z"/>
+          </svg>
+          <span>Library</span>
+        </button>
+      </nav>
 
       {/* ── LIGHTBOX ── */}
       {lightbox && (
