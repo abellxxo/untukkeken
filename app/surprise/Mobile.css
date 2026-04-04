@@ -1,34 +1,24 @@
-/* ═══════════════════════════════════
-   Mobile.css — Spotify iPhone Style
-   ═══════════════════════════════════ */
-
-/* --- STEP 1: Tambahkan ini untuk mengunci Safari --- */
+/* --- Kembalikan scroll natural Safari tapi background tetap hitam --- */
 html, body {
-  background-color: #000;
+  background-color: #121212; /* Biar nyaru sama warna background web */
   margin: 0;
   padding: 0;
-  height: 100%;
-  overscroll-behavior-y: none;
-  overflow: hidden;
+  /* Hapus overflow: hidden dan overscroll-behavior */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 .m-app {
-  display: flex;
-  flex-direction: column;
-  
-  /* --- STEP 2: Ubah ini (height 100dvh & position relative dihapus) --- */
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  
+  display: block; /* Hapus flex dan fixed dari sebelumnya */
+  min-height: 100vh;
   background: #121212;
   color: #fff;
   font-family: 'SpotifyMix', 'Circular Std', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  overflow: hidden;
+  padding-bottom: 100px; /* Kasih jarak di bawah biar foto/lagu paling bawah gak ketutup menu */
+}
+
+.m-scroll {
+  display: block; /* Hapus overflow-y: auto dari sini */
 }
 
 /* ── SCROLL CONTAINER ── */
@@ -277,15 +267,6 @@ html, body {
   align-items: center;
   justify-content: space-between;
   margin-top: 8px;
-}
-
-.m-heart-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 4px;
 }
 
 .m-play-circle {
@@ -642,12 +623,14 @@ html, body {
    MINI PLAYER
    ═══════════════ */
 .m-mini-player {
-  position: relative;
+  position: fixed; /* Paku di layar */
+  bottom: calc(64px + env(safe-area-inset-bottom)); /* Posisikan pas di atas menu bawah */
+  left: 8px;
+  right: 8px;
   background: #1a1a1a;
   border-radius: 10px;
-  margin: 0 8px;
   overflow: hidden;
-  flex-shrink: 0;
+  z-index: 1000; /* Pastikan selalu di depan */
 }
 
 .m-mini-progress {
@@ -723,11 +706,15 @@ html, body {
    BOTTOM NAV
    ═══════════════ */
 .m-bottom-nav {
+  position: fixed; /* Paku di paling bawah layar */
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   background: #0a0a0a;
   border-top: 1px solid #1a1a1a;
   padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
-  flex-shrink: 0;
+  z-index: 1000; /* Pastikan selalu di depan */
 }
 
 .m-nav-item {

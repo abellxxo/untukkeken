@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import "./Mobile.css";
 
-const PLAYLIST_ID = "3hBtJU9oHgkckXErVff3qM";
+const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
 
 const MONTHS = [
   { id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a",
@@ -295,7 +295,7 @@ const togglePlay = async () => {
   const OUR_PLAYLIST = {
     id: "ours", name: ourPlaylistInfo?.name || "Our Playlist", emoji: "🎵",
     desc: ourPlaylistInfo?.description || "The songs that are us.",
-    color: "#1DB954", bg: "#0a2d14", cover: "/photos/our-playlist.jpg",
+    color: "#1DB954", bg: "#0a2d14", cover: ourPlaylistInfo?.cover,
   };
 
   const allPlaylists = [...MONTHS, OUR_PLAYLIST];
@@ -310,7 +310,7 @@ const togglePlay = async () => {
   const useCounter = () => {
     const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
     useEffect(() => {
-      const start = new Date("2025-10-25T00:00:00");
+      const start = new Date("2024-10-25T00:00:00");
       const tick = () => {
         const now = new Date();
         const diff = now - start;
@@ -421,7 +421,7 @@ const togglePlay = async () => {
               </div>
               <button className="m-feature-card" onClick={() => openPlaylist(OUR_PLAYLIST)}>
                 <div className="m-feature-thumb">
-                  <img src="/photos/our-playlist.jpg" alt="Our Playlist"
+                  <img src={OUR_PLAYLIST.cover} alt={OUR_PLAYLIST.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }}
                     onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
                   />
@@ -431,12 +431,17 @@ const togglePlay = async () => {
                   <div className="m-feature-label">Playlist • Us</div>
                   <div className="m-feature-name">{OUR_PLAYLIST.name}</div>
                   <div className="m-feature-desc">{OUR_PLAYLIST.desc}</div>
-                  <div className="m-feature-actions">
-                    <button className="m-heart-btn">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                    </button>
-                    <button className="m-play-circle" onClick={(e) => { e.stopPropagation(); ourSongs.length > 0 && playSong(ourSongs[0]); }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M7.05 3.606l13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"/></svg>
+                  <div className="m-feature-actions" style={{ justifyContent: "flex-end" }}>
+                    <button className="m-play-circle" onClick={(e) => { 
+                      e.stopPropagation(); 
+                      if (isPlaying) togglePlay(); 
+                      else if (ourSongs.length > 0) playSong(ourSongs[0]); 
+                    }}>
+                      {isPlaying ? (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M5.7 3a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7H5.7zm10 0a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7h-2.6z"/></svg>
+                      ) : (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M7.05 3.606l13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"/></svg>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -495,10 +500,7 @@ const togglePlay = async () => {
 
             {/* Actions */}
             {activePlaylist.id === "ours" && (
-              <div className="m-playlist-actions">
-                <button className="m-heart-btn">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                </button>
+              <div className="m-playlist-actions" style={{ justifyContent: "flex-end", marginTop: "-10px" }}>
                 <button className="m-big-play" onClick={isPlaying ? togglePlay : () => ourSongs.length > 0 && playSong(ourSongs[0])}>
                   {isPlaying
                     ? <svg width="28" height="28" viewBox="0 0 24 24" fill="#000"><path d="M5.7 3a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7H5.7zm10 0a.7.7 0 0 0-.7.7v16.6a.7.7 0 0 0 .7.7h2.6a.7.7 0 0 0 .7-.7V3.7a.7.7 0 0 0-.7-.7h-2.6z"/></svg>

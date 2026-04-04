@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import "./Desktop.css";
 
-const PLAYLIST_ID = "3hBtJU9oHgkckXErVff3qM";
+const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
 
 const MONTHS = [
   {
@@ -399,7 +399,7 @@ export default function DesktopView() {
     desc: ourPlaylistInfo?.description || "The songs that are us.",
     color: "#1DB954",
     bg: "#0a2d14",
-    cover: "/photos/our-playlist.jpg",
+    cover: ourPlaylistInfo?.cover,
   };
 
   const allPlaylists = [...MONTHS, OUR_PLAYLIST];
