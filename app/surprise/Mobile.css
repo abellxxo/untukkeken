@@ -21,6 +21,10 @@ html, body {
   display: block; /* Hapus overflow-y: auto dari sini */
 }
 
+.m-scroll-fixed {
+  overflow: hidden;
+}
+
 /* ── SCROLL CONTAINER ── */
 .m-scroll {
   flex: 1;
@@ -617,89 +621,6 @@ html, body {
   padding: 64px 32px;
   text-align: center;
   color: #b3b3b3;
-}
-
-/* ═══════════════
-   MINI PLAYER
-   ═══════════════ */
-.m-mini-player {
-  position: fixed; /* Paku di layar */
-  bottom: calc(64px + env(safe-area-inset-bottom)); /* Posisikan pas di atas menu bawah */
-  left: 8px;
-  right: 8px;
-  background: #1a1a1a;
-  border-radius: 10px;
-  overflow: hidden;
-  z-index: 1000; /* Pastikan selalu di depan */
-}
-
-.m-mini-progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: #fff;
-  border-radius: 1px;
-  transition: width 0.5s linear;
-}
-
-.m-mini-inner {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-}
-
-.m-mini-thumb {
-  width: 44px;
-  height: 44px;
-  border-radius: 6px;
-  flex-shrink: 0;
-  background: #282828;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.m-mini-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.m-mini-title {
-  font-size: 14px;
-  font-weight: 400;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.m-mini-artist {
-  font-size: 11px;
-  color: #b3b3b3;
-  margin-top: 1px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.m-mini-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.m-mini-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
 }
 
 /* ═══════════════
