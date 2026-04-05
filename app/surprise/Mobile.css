@@ -3,26 +3,17 @@ html, body {
   background-color: #121212; /* Biar nyaru sama warna background web */
   margin: 0;
   padding: 0;
-  /* Hapus overflow: hidden dan overscroll-behavior */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 .m-app {
-  display: block; /* Hapus flex dan fixed dari sebelumnya */
+  display: block; 
   min-height: 100vh;
   background: #121212;
   color: #fff;
   font-family: 'SpotifyMix', 'Circular Std', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding-bottom: 100px; /* Kasih jarak di bawah biar foto/lagu paling bawah gak ketutup menu */
-}
-
-.m-scroll {
-  display: block; /* Hapus overflow-y: auto dari sini */
-}
-
-.m-scroll-fixed {
-  overflow: hidden;
 }
 
 /* ── SCROLL CONTAINER ── */
@@ -36,6 +27,11 @@ html, body {
 }
 
 .m-scroll::-webkit-scrollbar { display: none; }
+
+/* Ini yang bikin view Library gak bisa discroll */
+.m-scroll.m-scroll-fixed {
+  overflow-y: hidden;
+}
 
 /* ═══════════════
    HOME VIEW
