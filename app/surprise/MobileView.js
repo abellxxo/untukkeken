@@ -180,7 +180,7 @@ export default function MobileView() {
   const allPlaylists = [...MONTHS, OUR_PLAYLIST];
 
   return (
-    <div className="m-app">
+    <div className={`m-app ${view === "library" ? "no-scroll" : ""}`}>
       <div className={view === "library" ? "m-scroll m-scroll-fixed" : "m-scroll"}>
 
         {/* ══ HOME VIEW ══ */}

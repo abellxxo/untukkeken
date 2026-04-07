@@ -16,6 +16,12 @@ html, body {
   padding-bottom: 100px; /* Kasih jarak di bawah biar foto/lagu paling bawah gak ketutup menu */
 }
 
+.m-app.no-scroll {
+  height: 100dvh; /* dvh nyesuaiin ukuran layar Safari secara dinamis */
+  overflow: hidden;
+  padding-bottom: 0; /* Hapus jarak bawah biar gak nyisa scroll */
+}
+
 /* ── SCROLL CONTAINER ── */
 .m-scroll {
   flex: 1;
@@ -145,25 +151,16 @@ html, body {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  /* Tambahkan padding kiri-kanan 16px, bawah 8px */
-  padding: 0 16px 8px 16px; 
-  /* Margin negatif untuk menarik container ke paling ujung layar */
+  padding: 0 0 8px 0; /* Padding kiri-kanan dinolin aja */
   margin: 0 -16px; 
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  /* (Opsional) Tambahkan scroll-snap biar berhentinya pas di tengah/awal kartu */
   scroll-snap-type: x mandatory;
 }
 
 .m-cards-scroll::-webkit-scrollbar { display: none; }
 
-/* Tambahkan sedikit ruang kosong semu di paling akhir biar kartu terakhir 
-   tidak nempel banget di ujung kanan saat di-scroll mentok di HP tertentu */
-.m-cards-scroll::after {
-  content: "";
-  width: 4px;
-  flex-shrink: 0;
-}
+/* HAPUS .m-cards-scroll::after yang lama ya */
 
 .m-card {
   flex-shrink: 0;
@@ -176,8 +173,17 @@ html, body {
   color: #fff;
   cursor: pointer;
   transition: background 0.15s;
-  /* Bikin tiap kartu jadi titik perhentian yang rapi saat di-scroll */
   scroll-snap-align: start; 
+}
+
+/* Ini kuncinya: paksa kartu pertama kasih jarak ke pinggir kiri layar */
+.m-card:first-child {
+  margin-left: 12px;
+}
+
+/* Paksa kartu terakhir kasih jarak pas di-scroll mentok kanan */
+.m-card:last-child {
+  margin-right: 16px;
 }
 
 .m-card:active { background: #282828; }
