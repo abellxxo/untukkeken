@@ -34,7 +34,8 @@ export default function LoginPage() {
     
     if (password === TARGET_DATE) {
       setErrorMsg("");
-      router.push("/surprise"); 
+      // ✅ KUNCI PWA: Pakai replace() agar history form login ini terhapus
+      router.replace("/surprise"); 
     } else {
       setErrorMsg("Sabaarrr, memang belum selesai");
     }

@@ -2,57 +2,103 @@
 import { useState, useEffect } from "react";
 import "./Mobile.css";
 
-const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
-const PLAYLIST_URL = "https://open.spotify.com/playlist/1SIFyACKuXgde8rEcgWVby";
+const PLAYLIST_ID  = "1SIFyACKuXgde8rEcgWVby";
+const PLAYLIST_URL = `https://open.spotify.com/playlist/${PLAYLIST_ID}`;
+
+// Pakai ini biar PWA gak white screen pas balik dari Spotify
+const openSpotify = (url) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.rel = "noopener noreferrer";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
 
 const MONTHS = [
-  { id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a",
+  {
+    id: "oct", name: "October", emoji: "🍂", desc: "Where it all began.",
+    color: "#e8572a", bg: "#3d1a0a",
     photos: [
-      { src: "/photos/oct/1.jpg", w: 4, h: 5 },{ src: "/photos/oct/2.jpg", w: 3, h: 4 },
-      { src: "/photos/oct/3.jpg", w: 1, h: 1 },{ src: "/photos/oct/4.jpg", w: 4, h: 3 },
-      { src: "/photos/oct/5.jpg", w: 3, h: 4 },{ src: "/photos/oct/6.jpg", w: 1, h: 1 },
-      { src: "/photos/oct/7.jpg", w: 4, h: 5 },{ src: "/photos/oct/8.jpg", w: 3, h: 2 },
-    ]
+      { src: "/photos/oct/1.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/2.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/3.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/4.jpg", w: 4, h: 3 },
+      { src: "/photos/oct/5.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/6.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/7.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/8.jpg", w: 3, h: 2 },
+    ],
   },
-  { id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c",
+  {
+    id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.",
+    color: "#d4537e", bg: "#2d0f1c",
     photos: [
-      { src: "/photos/nov/1.jpg", w: 3, h: 4 },{ src: "/photos/nov/2.jpg", w: 1, h: 1 },
-      { src: "/photos/nov/3.jpg", w: 4, h: 5 },{ src: "/photos/nov/4.jpg", w: 3, h: 2 },
-      { src: "/photos/nov/5.jpg", w: 1, h: 1 },{ src: "/photos/nov/6.jpg", w: 4, h: 3 },
-      { src: "/photos/nov/7.jpg", w: 3, h: 4 },{ src: "/photos/nov/8.jpg", w: 4, h: 5 },
-    ]
+      { src: "/photos/nov/1.jpg", w: 3, h: 4 },
+      { src: "/photos/nov/2.jpg", w: 1, h: 1 },
+      { src: "/photos/nov/3.jpg", w: 4, h: 5 },
+      { src: "/photos/nov/4.jpg", w: 3, h: 2 },
+      { src: "/photos/nov/5.jpg", w: 1, h: 1 },
+      { src: "/photos/nov/6.jpg", w: 4, h: 3 },
+      { src: "/photos/nov/7.jpg", w: 3, h: 4 },
+      { src: "/photos/nov/8.jpg", w: 4, h: 5 },
+    ],
   },
-  { id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d",
+  {
+    id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.",
+    color: "#4facfe", bg: "#0a1f3d",
     photos: [
-      { src: "/photos/dec/1.jpg", w: 1, h: 1 },{ src: "/photos/dec/2.jpg", w: 4, h: 5 },
-      { src: "/photos/dec/3.jpg", w: 3, h: 2 },{ src: "/photos/dec/4.jpg", w: 3, h: 4 },
-      { src: "/photos/dec/5.jpg", w: 4, h: 3 },{ src: "/photos/dec/6.jpg", w: 1, h: 1 },
-      { src: "/photos/dec/7.jpg", w: 3, h: 4 },{ src: "/photos/dec/8.jpg", w: 4, h: 5 },
-    ]
+      { src: "/photos/dec/1.jpg", w: 1, h: 1 },
+      { src: "/photos/dec/2.jpg", w: 4, h: 5 },
+      { src: "/photos/dec/3.jpg", w: 3, h: 2 },
+      { src: "/photos/dec/4.jpg", w: 3, h: 4 },
+      { src: "/photos/dec/5.jpg", w: 4, h: 3 },
+      { src: "/photos/dec/6.jpg", w: 1, h: 1 },
+      { src: "/photos/dec/7.jpg", w: 3, h: 4 },
+      { src: "/photos/dec/8.jpg", w: 4, h: 5 },
+    ],
   },
-  { id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d",
+  {
+    id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.",
+    color: "#a78bfa", bg: "#1a0d3d",
     photos: [
-      { src: "/photos/jan/1.jpg", w: 4, h: 3 },{ src: "/photos/jan/2.jpg", w: 3, h: 4 },
-      { src: "/photos/jan/3.jpg", w: 1, h: 1 },{ src: "/photos/jan/4.jpg", w: 4, h: 5 },
-      { src: "/photos/jan/5.jpg", w: 3, h: 2 },{ src: "/photos/jan/6.jpg", w: 1, h: 1 },
-      { src: "/photos/jan/7.jpg", w: 4, h: 3 },{ src: "/photos/jan/8.jpg", w: 3, h: 4 },
-    ]
+      { src: "/photos/jan/1.jpg", w: 4, h: 3 },
+      { src: "/photos/jan/2.jpg", w: 3, h: 4 },
+      { src: "/photos/jan/3.jpg", w: 1, h: 1 },
+      { src: "/photos/jan/4.jpg", w: 4, h: 5 },
+      { src: "/photos/jan/5.jpg", w: 3, h: 2 },
+      { src: "/photos/jan/6.jpg", w: 1, h: 1 },
+      { src: "/photos/jan/7.jpg", w: 4, h: 3 },
+      { src: "/photos/jan/8.jpg", w: 3, h: 4 },
+    ],
   },
-  { id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20",
+  {
+    id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.",
+    color: "#f472b6", bg: "#2d0f20",
     photos: [
-      { src: "/photos/feb/1.jpg", w: 3, h: 4 },{ src: "/photos/feb/2.jpg", w: 4, h: 5 },
-      { src: "/photos/feb/3.jpg", w: 1, h: 1 },{ src: "/photos/feb/4.jpg", w: 3, h: 2 },
-      { src: "/photos/feb/5.jpg", w: 4, h: 3 },{ src: "/photos/feb/6.jpg", w: 3, h: 4 },
-      { src: "/photos/feb/7.jpg", w: 1, h: 1 },{ src: "/photos/feb/8.jpg", w: 4, h: 5 },
-    ]
+      { src: "/photos/feb/1.jpg", w: 3, h: 4 },
+      { src: "/photos/feb/2.jpg", w: 4, h: 5 },
+      { src: "/photos/feb/3.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/4.jpg", w: 3, h: 2 },
+      { src: "/photos/feb/5.jpg", w: 4, h: 3 },
+      { src: "/photos/feb/6.jpg", w: 3, h: 4 },
+      { src: "/photos/feb/7.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/8.jpg", w: 4, h: 5 },
+    ],
   },
-  { id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.", color: "#34d399", bg: "#0a2d1f",
+  {
+    id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.",
+    color: "#34d399", bg: "#0a2d1f",
     photos: [
-      { src: "/photos/mar/1.jpg", w: 1, h: 1 },{ src: "/photos/mar/2.jpg", w: 4, h: 3 },
-      { src: "/photos/mar/3.jpg", w: 3, h: 4 },{ src: "/photos/mar/4.jpg", w: 4, h: 5 },
-      { src: "/photos/mar/5.jpg", w: 3, h: 2 },{ src: "/photos/mar/6.jpg", w: 1, h: 1 },
-      { src: "/photos/mar/7.jpg", w: 3, h: 4 },{ src: "/photos/mar/8.jpg", w: 4, h: 3 },
-    ]
+      { src: "/photos/mar/1.jpg", w: 1, h: 1 },
+      { src: "/photos/mar/2.jpg", w: 4, h: 3 },
+      { src: "/photos/mar/3.jpg", w: 3, h: 4 },
+      { src: "/photos/mar/4.jpg", w: 4, h: 5 },
+      { src: "/photos/mar/5.jpg", w: 3, h: 2 },
+      { src: "/photos/mar/6.jpg", w: 1, h: 1 },
+      { src: "/photos/mar/7.jpg", w: 3, h: 4 },
+      { src: "/photos/mar/8.jpg", w: 4, h: 3 },
+    ],
   },
 ];
 
@@ -65,6 +111,8 @@ const OUR_PLAYLIST = {
   bg: "#0a2d14",
   cover: "/photos/our-playlist.jpg",
 };
+
+// ── Masonry Gallery ──────────────────────────────────────────────────────────
 
 function MasonryGallery({ photos, accent, emoji, onOpen }) {
   const [loaded, setLoaded] = useState({});
@@ -105,7 +153,7 @@ function MasonryGallery({ photos, accent, emoji, onOpen }) {
             <div className="m-masonry-img-wrap" style={{ paddingBottom: photo.aspectPad }}>
               {!loaded[i] && (
                 <div className="m-masonry-skeleton" style={{ background: accent + "22" }}>
-                  <span style={{ fontSize: 20, opacity: 0.4 }}>{emoji}</span>
+                  <span style={{ fontSize: 20, opacity: 0.4 }} suppressHydrationWarning>{emoji}</span>
                 </div>
               )}
               <img
@@ -128,13 +176,15 @@ function MasonryGallery({ photos, accent, emoji, onOpen }) {
   );
 }
 
+// ── Counter Hook ─────────────────────────────────────────────────────────────
+
 function useCounter() {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
   useEffect(() => {
-    const start = new Date("2024-10-25T00:00:00");
+    const start = new Date("2025-10-25T00:00:00");
     const tick = () => {
-      const now = new Date();
-      const diff = now - start;
+      const diff = Date.now() - start.getTime();
       setTime({
         days: Math.floor(diff / (1000 * 60 * 60 * 24)),
         hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -146,8 +196,11 @@ function useCounter() {
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
+
   return time;
 }
+
+// ── Main Component ───────────────────────────────────────────────────────────
 
 export default function MobileView() {
   const [view, setView] = useState("home");
@@ -156,7 +209,9 @@ export default function MobileView() {
   const { days, hours, minutes, seconds } = useCounter();
 
   useEffect(() => {
-    const handleEsc = (e) => { if (e.key === "Escape") setLightbox(null); };
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
@@ -170,7 +225,7 @@ export default function MobileView() {
 
   const openPlaylist = (p) => {
     if (p.id === "ours") {
-      window.open(PLAYLIST_URL, "_blank");
+      openSpotify(PLAYLIST_URL);
       return;
     }
     setActivePlaylist(p);
@@ -180,10 +235,10 @@ export default function MobileView() {
   const allPlaylists = [...MONTHS, OUR_PLAYLIST];
 
   return (
-    <div className={`m-app ${view === "library" ? "no-scroll" : ""}`}>
-      <div className={view === "library" ? "m-scroll m-scroll-fixed" : "m-scroll"}>
+    <div className={`m-app${view === "library" ? " no-scroll" : ""}`}>
+      <div className={`m-scroll${view === "library" ? " m-scroll-fixed" : ""}`}>
 
-        {/* ══ HOME VIEW ══ */}
+        {/* ── HOME ── */}
         {view === "home" && (
           <div className="m-home">
             <div className="m-home-hero">
@@ -193,12 +248,24 @@ export default function MobileView() {
               <div className="m-quick-grid">
                 {allPlaylists.slice(0, 6).map(p => (
                   <button key={p.id} className="m-quick-card" onClick={() => openPlaylist(p)}>
-                    <div className="m-quick-thumb" style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden" }}>
-                      {p.cover
-                        ? <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                            onError={(e) => { e.target.style.display = "none"; e.target.parentNode.style.background = p.color; e.target.parentNode.innerHTML = `<span style="font-size:20px">${p.emoji}</span>`; }}
-                          />
-                        : <span style={{ fontSize: 20 }}>{p.emoji}</span>}
+                    <div
+                      className="m-quick-thumb"
+                      style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden" }}
+                    >
+                      {p.cover ? (
+                        <img
+                          src={p.cover}
+                          alt={p.name}
+                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                          onError={(e) => {
+                            e.target.style.display = "none";
+                            e.target.parentNode.style.background = p.color;
+                            e.target.parentNode.innerHTML = `<span style="font-size:20px">${p.emoji}</span>`;
+                          }}
+                        />
+                      ) : (
+                        <span style={{ fontSize: 20 }} suppressHydrationWarning>{p.emoji}</span>
+                      )}
                     </div>
                     <span className="m-quick-name">{p.name}</span>
                   </button>
@@ -219,7 +286,7 @@ export default function MobileView() {
                 {MONTHS.map(p => (
                   <button key={p.id} className="m-card" onClick={() => openPlaylist(p)}>
                     <div className="m-card-img" style={{ background: p.bg, border: `1px solid ${p.color}33` }}>
-                      <span style={{ fontSize: 36 }}>{p.emoji}</span>
+                      <span style={{ fontSize: 36 }} suppressHydrationWarning>{p.emoji}</span>
                     </div>
                     <div className="m-card-title">{p.name}</div>
                     <div className="m-card-desc">{p.desc}</div>
@@ -232,23 +299,50 @@ export default function MobileView() {
               <div className="m-section-header">
                 <span className="m-section-title">Our Playlist 🎵</span>
               </div>
-              <div className="m-feature-card" onClick={() => openPlaylist(OUR_PLAYLIST)}>
+              
+              {/* ✅ FIX: Changed <button> to <div> with role="button" */}
+              <div 
+                className="m-feature-card" 
+                onClick={() => openPlaylist(OUR_PLAYLIST)}
+                role="button"
+                tabIndex={0}
+              >
                 <div className="m-feature-thumb">
                   <img
                     src={OUR_PLAYLIST.cover}
                     alt={OUR_PLAYLIST.name}
                     style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px 0 0 8px" }}
-                    onError={(e) => { e.target.style.display = "none"; e.target.nextSibling.style.display = "flex"; }}
+                    onError={(e) => {
+                      e.target.style.display = "none";
+                      e.target.nextSibling.style.display = "flex";
+                    }}
                   />
-                  <div style={{ display: "none", width: "100%", height: "100%", alignItems: "center", justifyContent: "center", fontSize: 48, background: "#0a2d14" }}>🎵</div>
+                  <div
+                    style={{
+                      display: "none", width: "100%", height: "100%",
+                      alignItems: "center", justifyContent: "center",
+                      fontSize: 48, background: "#0a2d14",
+                    }}
+                  >
+                    🎵
+                  </div>
                 </div>
                 <div className="m-feature-info">
                   <div className="m-feature-label">Playlist • Us</div>
                   <div className="m-feature-name">{OUR_PLAYLIST.name}</div>
                   <div className="m-feature-desc">{OUR_PLAYLIST.desc}</div>
                   <div className="m-feature-actions" style={{ justifyContent: "flex-end" }}>
-                    <button className="m-play-circle" onClick={(e) => { e.stopPropagation(); window.open(PLAYLIST_URL, "_blank"); }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="#000"><path d="M7.05 3.606l13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z"/></svg>
+                    <button
+                      className="m-play-circle"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openSpotify(PLAYLIST_URL);
+                      }}
+                      aria-label="Open playlist on Spotify"
+                    >
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="#000">
+                        <path d="M7.05 3.606l13.49 7.788a.7.7 0 0 1 0 1.212L7.05 20.394A.7.7 0 0 1 6 19.788V4.212a.7.7 0 0 1 1.05-.606z" />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -259,7 +353,7 @@ export default function MobileView() {
           </div>
         )}
 
-        {/* ══ LIBRARY VIEW ══ */}
+        {/* ── LIBRARY ── */}
         {view === "library" && (
           <div className="m-library">
             <h2 className="m-lib-title">Your Library</h2>
@@ -267,7 +361,7 @@ export default function MobileView() {
               {MONTHS.map(p => (
                 <button key={p.id} className="m-lib-item" onClick={() => openPlaylist(p)}>
                   <div className="m-lib-thumb" style={{ background: p.color, overflow: "hidden" }}>
-                    <span style={{ fontSize: 22 }}>{p.emoji}</span>
+                    <span style={{ fontSize: 22 }} suppressHydrationWarning>{p.emoji}</span>
                   </div>
                   <div className="m-lib-info">
                     <div className="m-lib-name">{p.name}</div>
@@ -279,15 +373,22 @@ export default function MobileView() {
           </div>
         )}
 
-        {/* ══ PLAYLIST VIEW ══ */}
+        {/* ── PLAYLIST ── */}
         {view === "playlist" && activePlaylist && (
           <div className="m-playlist-view">
-            <div className="m-playlist-hero" style={{ background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)` }}>
-              <button className="m-back-btn" onClick={() => setView("home")}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z"/></svg>
+            <div
+              className="m-playlist-hero"
+              style={{
+                background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)`,
+              }}
+            >
+              <button className="m-back-btn" onClick={() => setView("home")} aria-label="Go back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z" />
+                </svg>
               </button>
               <div className="m-playlist-cover">
-                <span style={{ fontSize: 64 }}>{activePlaylist.emoji}</span>
+                <span style={{ fontSize: 64 }} suppressHydrationWarning>{activePlaylist.emoji}</span>
               </div>
               <div className="m-playlist-meta">
                 <div className="m-playlist-type">Memories</div>
@@ -309,12 +410,24 @@ export default function MobileView() {
 
       {/* ── BOTTOM NAV ── */}
       <nav className="m-bottom-nav">
-        <button className={`m-nav-item${view === "home" ? " active" : ""}`} onClick={() => setView("home")}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <button
+          className={`m-nav-item${view === "home" ? " active" : ""}`}
+          onClick={() => setView("home")}
+          aria-label="Home"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+          </svg>
           <span>Home</span>
         </button>
-        <button className={`m-nav-item${view === "library" ? " active" : ""}`} onClick={() => setView("library")}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M3 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm6 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4zm7-1a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-2z"/></svg>
+        <button
+          className={`m-nav-item${view === "library" ? " active" : ""}`}
+          onClick={() => setView("library")}
+          aria-label="Your Library"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm6 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4zm7-1a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-2z" />
+          </svg>
           <span>Your Library</span>
         </button>
       </nav>
@@ -322,16 +435,21 @@ export default function MobileView() {
       {/* ── LIGHTBOX ── */}
       {lightbox && (
         <div className="m-lightbox" onClick={() => setLightbox(null)}>
-          <button className="m-lightbox-close" onClick={() => setLightbox(null)}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.707 5.293a1 1 0 0 0-1.414 0L12 10.586 6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 1 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 0 0 0-1.414z"/></svg>
+          <button
+            className="m-lightbox-close"
+            onClick={() => setLightbox(null)}
+            aria-label="Close"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.707 5.293a1 1 0 0 0-1.414 0L12 10.586 6.707 5.293a1 1 0 0 0-1.414 1.414L10.586 12l-5.293 5.293a1 1 0 1 0 1.414 1.414L12 13.414l5.293 5.293a1 1 0 0 0 1.414-1.414L13.414 12l5.293-5.293a1 1 0 0 0 0-1.414z" />
+            </svg>
           </button>
-          <div className="m-lightbox-inner" onClick={e => e.stopPropagation()}>
+          <div className="m-lightbox-inner" onClick={(e) => e.stopPropagation()}>
             <img src={lightbox.src} alt={lightbox.caption || ""} className="m-lightbox-img" />
             {lightbox.caption && <p className="m-lightbox-caption">{lightbox.caption}</p>}
           </div>
         </div>
       )}
-
     </div>
   );
 }

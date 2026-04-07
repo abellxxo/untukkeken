@@ -3,9 +3,11 @@
   "short_name": "Untuk Keken",
   "description": "Where it all began.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#3b13b0",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
