@@ -17,7 +17,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* Dengan sizes dulu (specific), fallback tanpa sizes PALING BAWAH */}
+        <link rel="icon" type="image/png" href="/icons/icon-192x192.png" />
+        <link rel="shortcut icon" href="/icons/icon-192x192.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
         <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-192x192.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-192x192.png" />
