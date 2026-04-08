@@ -153,7 +153,7 @@ html, body {
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
-  scroll-padding: 0 16px; /* ✅ FIX: Tambahan untuk mencegah nempel tembok */
+  scroll-padding: 0 16px; 
 }
 
 .m-cards-scroll::-webkit-scrollbar { display: none; }
@@ -172,18 +172,17 @@ html, body {
   scroll-snap-align: start;
 }
 
-/* ✅ FIX: first-child dan last-child margin sudah dihapus dari sini */
-
-.m-card:active      { background: #282828; }
+.m-card:active { background: #282828; }
 
 .m-card-img {
   width: 100%;
-  aspect-ratio: 1;
+  height: 116px; /* ✅ Kunci tinggi jadi kotak sempurna (Mencegah teks naik-turun) */
   border-radius: 6px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* ✅ Memotong sisa gambar agar tidak tumpah */
 }
 
 .m-card-title {
@@ -211,7 +210,8 @@ html, body {
   gap: 16px;
   background: #1a1a1a;
   border-radius: 10px;
-  overflow: hidden;
+  overflow: hidden; /* ✅ Otomatis memotong gambar sesuai lengkungan border */
+  padding: 0;       /* ✅ Pastikan margin dalam (padding) bersih dari semua sisi */
   border: none;
   cursor: pointer;
   text-align: left;
@@ -227,6 +227,10 @@ html, body {
   height: 140px;
   flex-shrink: 0;
   background: #282828;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px 0 0 8px; /* ← tambah ini */
+  overflow: hidden;            /* ← tambah ini */
 }
 
 .m-feature-info {
@@ -244,7 +248,7 @@ html, body {
 }
 
 .m-feature-name {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #fff;
 }

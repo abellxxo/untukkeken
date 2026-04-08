@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
+import { useRouter } from "next/navigation"; // <-- Tambahan untuk router query parameter
 import "./Desktop.css";
 
 const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
@@ -212,6 +213,7 @@ function MasonryGallery({ photos, accent, emoji, onOpen }) {
 }
 
 export default function DesktopView() {
+  const router = useRouter(); // <-- Deklarasi router
   const { data: session, status } = useSession();
   const [view, setView] = useState("home");
   const [activePlaylist, setActivePlaylist] = useState(null);
@@ -453,7 +455,7 @@ export default function DesktopView() {
   const useCounter = () => {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   useEffect(() => {
-    const start = new Date("2025-10-25T00:00:00");
+    const start = new Date("2025-10-25T22:30:00"); // <-- Tanggal dari database kamu
     const tick = () => {
       const now = new Date();
       const diff = now - start;
@@ -471,7 +473,29 @@ export default function DesktopView() {
   return time;
 };
 
-  const openPlaylist = (p) => { setActivePlaylist(p); setView("playlist"); };
+  // <-- Fungsi openPlaylist yang pakai router.push biar URL-nya nambah buntut query!
+  const openPlaylist = (p) => {
+    if (p.id === "ours") {
+      setActivePlaylist(p);
+      setView("playlist");
+    } else {
+      const namaBulan = {
+        oct: "october",
+        nov: "november",
+        dec: "december",
+        jan: "january",
+        feb: "february",
+        mar: "march"
+      };
+      // Ganti URL jadi ?bulan=october tanpa me-reload halaman
+      router.push(`/surprise?bulan=${namaBulan[p.id]}`); 
+      
+      // Tetap ubah tampilan komponennya
+      setActivePlaylist(p);
+      setView("playlist");
+    }
+  };
+
   const { days, hours, minutes, seconds } = useCounter();
 
   const PlayIcon = () => (
@@ -522,7 +546,7 @@ export default function DesktopView() {
             <img src="/iconspotify.png" alt="logo" width={300} height={80} style={{ objectFit: "contain" }} />
           </div>
           <nav className="sp-nav">
-            <button className={`sp-nav-item${view === "home" ? " active" : ""}`} onClick={() => setView("home")}>
+            <button className={`sp-nav-item${view === "home" ? " active" : ""}`} onClick={() => { setView("home"); router.push('/surprise'); }}>
               <img src="/home-icon.png" alt="Home" width="20" height="20" style={{ objectFit: "contain", transform: "translateY(-1px)" }} />
               <span style={{ transform: "translateY(1px)" }}>Home</span>
             </button>
@@ -652,7 +676,8 @@ export default function DesktopView() {
                 className="sp-playlist-hero"
                 style={{ background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)` }}
               >
-                <button className="sp-back-btn" onClick={() => setView("home")}>
+                {/* <-- Tombol back ini dibikin biar bersihin URL juga! --> */}
+                <button className="sp-back-btn" onClick={() => { setView("home"); router.push('/surprise'); }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z"/></svg>
                 </button>
                 <div className="sp-playlist-cover">
@@ -819,7 +844,7 @@ export default function DesktopView() {
       <nav className="sp-mobile-nav">
         <button
           className={`sp-mobile-nav-item${view === "home" ? " active" : ""}`}
-          onClick={() => { setView("home"); setShowMobileLibrary(false); }}
+          onClick={() => { setView("home"); setShowMobileLibrary(false); router.push('/surprise'); }}
         >
           <img src="/home-icon.png" alt="Home" width="22" height="22" style={{ objectFit: "contain" }} />
           <span>Home</span>

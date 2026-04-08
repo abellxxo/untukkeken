@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import "./Mobile.css";
 
 const PLAYLIST_ID  = "1SIFyACKuXgde8rEcgWVby";
@@ -42,7 +43,7 @@ const MONTHS = [
     ],
   },
   {
-    id: "nov", name: "November", emoji: "🍁", desc: "Uhhh second month",
+    id: "nov", name: "November", emoji: "🍁", desc: "Uhhh second month.",
     color: "#d4537e", bg: "#2d0f1c",
     cover: "/photos/nov-cover.png",
     photos: [
@@ -123,7 +124,7 @@ const MONTHS = [
     ],
   },
   {
-    id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.",
+    id: "mar", name: "March", emoji: "🌿", desc: "5 months...",
     color: "#34d399", bg: "#0a2d1f",
     cover: "/photos/mar-cover.png",
     photos: [
@@ -151,7 +152,7 @@ const OUR_PLAYLIST = {
   id: "ours",
   name: "The Kenisha Tape",
   emoji: "🎵",
-  desc: "A playlist for the way she makes everything softer.",
+  desc: "Inspired by you.",
   color: "#1DB954",
   bg: "#0a2d14",
   cover: "/photos/our-playlist.jpg",
@@ -245,13 +246,38 @@ function useCounter() {
   return time;
 }
 
-// ── Main Component ───────────────────────────────────────────────────────────
+// ── Main Content Component ───────────────────────────────────────────────────
 
-export default function MobileView() {
+function MobileViewContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
   const [view, setView] = useState("home");
+  const [previousView, setPreviousView] = useState("home"); // ✅ KUNCI 1: Ingatan posisi sebelumnya
   const [activePlaylist, setActivePlaylist] = useState(null);
   const [lightbox, setLightbox] = useState(null);
   const { days, hours, minutes, seconds } = useCounter();
+
+  // Membaca URL parameter "?bulan=..."
+  const bulanParam = searchParams.get("bulan");
+
+  // Efek untuk memantau perubahan URL dan Swipe-Back
+  useEffect(() => {
+    if (bulanParam) {
+      const foundMonth = MONTHS.find(m => m.id === bulanParam);
+      if (foundMonth) {
+        setActivePlaylist(foundMonth);
+        setView("playlist");
+      }
+    } else {
+      // ✅ KUNCI 2: Jika URL kembali normal, kembalikan ke view SEBELUMNYA, bukan selalu "home"
+      if (view === "playlist") {
+        setView(previousView); 
+        setActivePlaylist(null);
+      }
+    }
+  }, [bulanParam, view, previousView]);
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -273,8 +299,9 @@ export default function MobileView() {
       openSpotify(PLAYLIST_URL);
       return;
     }
-    setActivePlaylist(p);
-    setView("playlist");
+    // ✅ KUNCI 3: Simpan posisi saat ini (home / library) sebelum pindah halaman
+    setPreviousView(view); 
+    router.push(`${pathname}?bulan=${p.id}`);
   };
 
   const allPlaylists = [...MONTHS, OUR_PLAYLIST];
@@ -359,7 +386,7 @@ export default function MobileView() {
                   <img
                     src={OUR_PLAYLIST.cover}
                     alt={OUR_PLAYLIST.name}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px 0 0 8px" }}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     onError={(e) => {
                       e.target.style.display = "none";
                       e.target.nextSibling.style.display = "flex";
@@ -434,7 +461,7 @@ export default function MobileView() {
                 background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)`,
               }}
             >
-              <button className="m-back-btn" onClick={() => setView("home")} aria-label="Go back">
+              <button className="m-back-btn" onClick={() => router.push(pathname)} aria-label="Go back">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z" />
                 </svg>
@@ -468,22 +495,32 @@ export default function MobileView() {
       <nav className="m-bottom-nav">
         <button
           className={`m-nav-item${view === "home" ? " active" : ""}`}
-          onClick={() => setView("home")}
+          onClick={() => {
+            setView("home");
+            if (bulanParam) router.push(pathname); 
+          }}
           aria-label="Home"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-          </svg>
+          <img 
+            src="/home-icon.png" 
+            alt="Home Icon" 
+            style={{ width: "24px", height: "24px", objectFit: "contain" }} 
+          />
           <span>Home</span>
         </button>
         <button
           className={`m-nav-item${view === "library" ? " active" : ""}`}
-          onClick={() => setView("library")}
+          onClick={() => {
+            setView("library");
+            if (bulanParam) router.push(pathname); 
+          }}
           aria-label="Your Library"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M3 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm6 0a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4zm7-1a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-2z" />
-          </svg>
+          <img 
+            src="/lib-icon.png" 
+            alt="Library Icon" 
+            style={{ width: "24px", height: "24px", objectFit: "contain" }} 
+          />
           <span>Your Library</span>
         </button>
       </nav>
@@ -507,5 +544,14 @@ export default function MobileView() {
         </div>
       )}
     </div>
+  );
+}
+
+// ── Wrapper Utama untuk Handle Suspense ──────────────────────────────────────
+export default function MobileView() {
+  return (
+    <Suspense fallback={<div style={{ background: "#121212", minHeight: "100vh" }} />}>
+      <MobileViewContent />
+    </Suspense>
   );
 }
