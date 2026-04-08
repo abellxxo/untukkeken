@@ -19,6 +19,7 @@ const MONTHS = [
   {
     id: "oct", name: "October", emoji: "🍂", desc: "Where it all began.",
     color: "#e8572a", bg: "#3d1a0a",
+    cover: "/photos/oct-cover.png",
     photos: [
       { src: "/photos/oct/1.jpg", w: 4, h: 5 },
       { src: "/photos/oct/2.jpg", w: 3, h: 4 },
@@ -28,11 +29,22 @@ const MONTHS = [
       { src: "/photos/oct/6.jpg", w: 1, h: 1 },
       { src: "/photos/oct/7.jpg", w: 4, h: 5 },
       { src: "/photos/oct/8.jpg", w: 3, h: 2 },
+      { src: "/photos/oct/9.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/10.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/11.jpg", w: 3, h: 2 },
+      { src: "/photos/oct/12.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/13.jpg", w: 4, h: 3 },
+      { src: "/photos/oct/14.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/15.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/16.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/17.jpg", w: 4, h: 3 },
+      { src: "/photos/oct/18.jpg", w: 3, h: 2 },
     ],
   },
   {
-    id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.",
+    id: "nov", name: "November", emoji: "🍁", desc: "Second month",
     color: "#d4537e", bg: "#2d0f1c",
+    cover: "/photos/nov-cover.png",
     photos: [
       { src: "/photos/nov/1.jpg", w: 3, h: 4 },
       { src: "/photos/nov/2.jpg", w: 1, h: 1 },
@@ -42,11 +54,16 @@ const MONTHS = [
       { src: "/photos/nov/6.jpg", w: 4, h: 3 },
       { src: "/photos/nov/7.jpg", w: 3, h: 4 },
       { src: "/photos/nov/8.jpg", w: 4, h: 5 },
+      { src: "/photos/nov/9.jpg", w: 4, h: 3 },
+      { src: "/photos/nov/10.jpg", w: 3, h: 4 },
+      { src: "/photos/nov/11.jpg", w: 1, h: 1 },
+      { src: "/photos/nov/12.jpg", w: 4, h: 5 },
     ],
   },
   {
-    id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.",
+    id: "dec", name: "December", emoji: "❄️", desc: "It's all about you.",
     color: "#4facfe", bg: "#0a1f3d",
+    cover: "/photos/dec-cover.png",
     photos: [
       { src: "/photos/dec/1.jpg", w: 1, h: 1 },
       { src: "/photos/dec/2.jpg", w: 4, h: 5 },
@@ -56,11 +73,15 @@ const MONTHS = [
       { src: "/photos/dec/6.jpg", w: 1, h: 1 },
       { src: "/photos/dec/7.jpg", w: 3, h: 4 },
       { src: "/photos/dec/8.jpg", w: 4, h: 5 },
+      { src: "/photos/dec/9.jpg", w: 4, h: 3 },
+      { src: "/photos/dec/10.jpg", w: 1, h: 1 },
+      { src: "/photos/dec/11.jpg", w: 3, h: 2 },
     ],
   },
   {
     id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.",
     color: "#a78bfa", bg: "#1a0d3d",
+    cover: "/photos/jan-cover.jpg",
     photos: [
       { src: "/photos/jan/1.jpg", w: 4, h: 3 },
       { src: "/photos/jan/2.jpg", w: 3, h: 4 },
@@ -75,6 +96,7 @@ const MONTHS = [
   {
     id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.",
     color: "#f472b6", bg: "#2d0f20",
+    cover: "/photos/feb-cover.jpg",
     photos: [
       { src: "/photos/feb/1.jpg", w: 3, h: 4 },
       { src: "/photos/feb/2.jpg", w: 4, h: 5 },
@@ -89,6 +111,7 @@ const MONTHS = [
   {
     id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.",
     color: "#34d399", bg: "#0a2d1f",
+    cover: "/photos/mar-cover.jpg",
     photos: [
       { src: "/photos/mar/1.jpg", w: 1, h: 1 },
       { src: "/photos/mar/2.jpg", w: 4, h: 3 },
@@ -285,8 +308,12 @@ export default function MobileView() {
               <div className="m-cards-scroll">
                 {MONTHS.map(p => (
                   <button key={p.id} className="m-card" onClick={() => openPlaylist(p)}>
-                    <div className="m-card-img" style={{ background: p.bg, border: `1px solid ${p.color}33` }}>
-                      <span style={{ fontSize: 36 }} suppressHydrationWarning>{p.emoji}</span>
+                    <div className="m-card-img" style={{ background: p.cover ? "transparent" : p.bg, border: `1px solid ${p.color}33`, overflow: "hidden" }}>
+                      {p.cover ? (
+                        <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      ) : (
+                        <span style={{ fontSize: 36 }} suppressHydrationWarning>{p.emoji}</span>
+                      )}
                     </div>
                     <div className="m-card-title">{p.name}</div>
                     <div className="m-card-desc">{p.desc}</div>
@@ -300,7 +327,6 @@ export default function MobileView() {
                 <span className="m-section-title">Our Playlist 🎵</span>
               </div>
               
-              {/* ✅ FIX: Changed <button> to <div> with role="button" */}
               <div 
                 className="m-feature-card" 
                 onClick={() => openPlaylist(OUR_PLAYLIST)}
@@ -360,8 +386,12 @@ export default function MobileView() {
             <div className="m-lib-list">
               {MONTHS.map(p => (
                 <button key={p.id} className="m-lib-item" onClick={() => openPlaylist(p)}>
-                  <div className="m-lib-thumb" style={{ background: p.color, overflow: "hidden" }}>
-                    <span style={{ fontSize: 22 }} suppressHydrationWarning>{p.emoji}</span>
+                  <div className="m-lib-thumb" style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden" }}>
+                    {p.cover ? (
+                      <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      <span style={{ fontSize: 22 }} suppressHydrationWarning>{p.emoji}</span>
+                    )}
                   </div>
                   <div className="m-lib-info">
                     <div className="m-lib-name">{p.name}</div>
@@ -387,8 +417,12 @@ export default function MobileView() {
                   <path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z" />
                 </svg>
               </button>
-              <div className="m-playlist-cover">
-                <span style={{ fontSize: 64 }} suppressHydrationWarning>{activePlaylist.emoji}</span>
+              <div className="m-playlist-cover" style={{ background: activePlaylist.cover ? "transparent" : "rgba(0,0,0,0.2)" }}>
+                {activePlaylist.cover ? (
+                  <img src={activePlaylist.cover} alt={activePlaylist.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <span style={{ fontSize: 64 }} suppressHydrationWarning>{activePlaylist.emoji}</span>
+                )}
               </div>
               <div className="m-playlist-meta">
                 <div className="m-playlist-type">Memories</div>

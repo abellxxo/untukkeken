@@ -7,7 +7,7 @@ const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
 
 const MONTHS = [
   {
-    id: "oct", name: "Octoberr", emoji: "🍂", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a",
+    id: "oct", name: "October", emoji: "🍂", cover: "/oct-cover.png", desc: "Where it all began.", color: "#e8572a", bg: "#3d1a0a",
     photos: [
       { src: "/photos/oct/1.jpg", w: 4, h: 5 },
       { src: "/photos/oct/2.jpg", w: 3, h: 4 },
@@ -17,10 +17,20 @@ const MONTHS = [
       { src: "/photos/oct/6.jpg", w: 1, h: 1 },
       { src: "/photos/oct/7.jpg", w: 4, h: 5 },
       { src: "/photos/oct/8.jpg", w: 3, h: 2 },
+      { src: "/photos/oct/9.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/10.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/11.jpg", w: 3, h: 2 },
+      { src: "/photos/oct/12.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/13.jpg", w: 4, h: 3 },
+      { src: "/photos/oct/14.jpg", w: 1, h: 1 },
+      { src: "/photos/oct/15.jpg", w: 3, h: 4 },
+      { src: "/photos/oct/16.jpg", w: 4, h: 5 },
+      { src: "/photos/oct/17.jpg", w: 4, h: 3 },
+      { src: "/photos/oct/18.jpg", w: 3, h: 2 },
     ]
   },
   {
-    id: "nov", name: "November", emoji: "🍁", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c",
+    id: "nov", name: "November", emoji: "🍁", cover: "/nov-cover.png", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c",
     photos: [
       { src: "/photos/nov/1.jpg", w: 3, h: 4 },
       { src: "/photos/nov/2.jpg", w: 1, h: 1 },
@@ -30,10 +40,14 @@ const MONTHS = [
       { src: "/photos/nov/6.jpg", w: 4, h: 3 },
       { src: "/photos/nov/7.jpg", w: 3, h: 4 },
       { src: "/photos/nov/8.jpg", w: 4, h: 5 },
+      { src: "/photos/nov/9.jpg", w: 4, h: 3 },
+      { src: "/photos/nov/10.jpg", w: 3, h: 4 },
+      { src: "/photos/nov/11.jpg", w: 1, h: 1 },
+      { src: "/photos/nov/12.jpg", w: 4, h: 5 },
     ]
   },
   {
-    id: "dec", name: "December", emoji: "❄️", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d",
+    id: "dec", name: "December", emoji: "❄️", cover: "/dec-cover.png", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d",
     photos: [
       { src: "/photos/dec/1.jpg", w: 1, h: 1 },
       { src: "/photos/dec/2.jpg", w: 4, h: 5 },
@@ -43,10 +57,13 @@ const MONTHS = [
       { src: "/photos/dec/6.jpg", w: 1, h: 1 },
       { src: "/photos/dec/7.jpg", w: 3, h: 4 },
       { src: "/photos/dec/8.jpg", w: 4, h: 5 },
+      { src: "/photos/dec/9.jpg", w: 4, h: 3 },
+      { src: "/photos/dec/10.jpg", w: 1, h: 1 },
+      { src: "/photos/dec/11.jpg", w: 3, h: 2 },
     ]
   },
   {
-    id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d",
+    id: "jan", name: "January", emoji: "🌸", cover: "/jan-cover.png", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d",
     photos: [
       { src: "/photos/jan/1.jpg", w: 4, h: 3 },
       { src: "/photos/jan/2.jpg", w: 3, h: 4 },
@@ -59,7 +76,7 @@ const MONTHS = [
     ]
   },
   {
-    id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20",
+    id: "feb", name: "February", emoji: "💕", cover: "/feb-cover.png", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20",
     photos: [
       { src: "/photos/feb/1.jpg", w: 3, h: 4 },
       { src: "/photos/feb/2.jpg", w: 4, h: 5 },
@@ -72,7 +89,7 @@ const MONTHS = [
     ]
   },
   {
-    id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.", color: "#34d399", bg: "#0a2d1f",
+    id: "mar", name: "March", emoji: "🌿", cover: "/mar-cover.png", desc: "5 months and counting.", color: "#34d399", bg: "#0a2d1f",
     photos: [
       { src: "/photos/mar/1.jpg", w: 1, h: 1 },
       { src: "/photos/mar/2.jpg", w: 4, h: 3 },
@@ -459,7 +476,7 @@ export default function DesktopView() {
   };
 
   if (status === "loading") {
-    return <div style={{ background: "#000", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 18 }}>Loading...</div>;
+    return <div style={{ background: "#000", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 18 }}>...</div>;
   }
 
   if (!session) {
@@ -561,7 +578,7 @@ export default function DesktopView() {
       <div className="sp-main">
         {view === "home" && (
           <div className="sp-home" style={{ overflowY: "auto", height: "100%" }}>
-            <div className="sp-home-header" style={{ background: "linear-gradient(180deg,#1a3a2a 0%,transparent 100%)", paddingTop:32 }}>
+            <div className="sp-home-header" style={{ paddingTop: 32 }}>
               <div className="sp-greeting">{greeting()}, Kenisha 💕</div>
               <div className="sp-counter-bar" style={{ background: "#1DB954", borderRadius: 9, padding: "14px 24px", marginBottom: 20, display: "block", textAlign: "center" }}>
   <span style={{ fontSize: 15, fontWeight: 400, color: "#fff" }}>
@@ -590,7 +607,9 @@ export default function DesktopView() {
                 {MONTHS.map(p => (
                   <button key={p.id} className="sp-card" onClick={() => openPlaylist(p)}>
                     <div className="sp-card-img" style={{ background: p.bg, border: `1px solid ${p.color}22` }}>
-                      <span style={{ fontSize: 44 }}>{p.emoji}</span>
+                      {p.cover 
+                        ? <img src={p.cover} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 8 }} />
+                        : <span style={{ fontSize: 44 }}>{p.emoji}</span>}
                     </div>
                     <div className="sp-card-title">{p.name}</div>
                     <div className="sp-card-desc">{p.desc}</div>
@@ -751,7 +770,7 @@ export default function DesktopView() {
             </div>
           </div>
           <div className="sp-player-right">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="#b3b3b3"><path d="M13 3a1 1 0 1 0-2 0v1.07A8.002 8.002 0 0 0 4.07 12H3a1 1 0 1 0 0 2h1.07A8.002 8.002 0 0 0 11 21.93V23a1 1 0 1 0 2 0v-1.07A8.002 8.002 0 0 0 19.93 14H21a1 1 0 1 0 0-2h-1.07A8.002 8.002 0 0 0 13 4.07V3z"/></svg>
+            <img src="/volumetombol.png" alt="Volume" width="16" height="16" style={{ objectFit: "contain", pointerEvents: "none" }} />
             <input
               type="range"
               className="sp-slider-input"
