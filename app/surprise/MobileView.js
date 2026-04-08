@@ -254,7 +254,7 @@ function MobileViewContent() {
   const pathname = usePathname();
 
   const [view, setView] = useState("home");
-  const [previousView, setPreviousView] = useState("home"); // ✅ KUNCI 1: Ingatan posisi sebelumnya
+  const [previousView, setPreviousView] = useState("home"); 
   const [activePlaylist, setActivePlaylist] = useState(null);
   const [lightbox, setLightbox] = useState(null);
   const { days, hours, minutes, seconds } = useCounter();
@@ -271,7 +271,6 @@ function MobileViewContent() {
         setView("playlist");
       }
     } else {
-      // ✅ KUNCI 2: Jika URL kembali normal, kembalikan ke view SEBELUMNYA, bukan selalu "home"
       if (view === "playlist") {
         setView(previousView); 
         setActivePlaylist(null);
@@ -299,7 +298,6 @@ function MobileViewContent() {
       openSpotify(PLAYLIST_URL);
       return;
     }
-    // ✅ KUNCI 3: Simpan posisi saat ini (home / library) sebelum pindah halaman
     setPreviousView(view); 
     router.push(`${pathname}?bulan=${p.id}`);
   };
@@ -314,6 +312,20 @@ function MobileViewContent() {
         {view === "home" && (
           <div className="m-home">
             <div className="m-home-hero">
+              
+              {/* ✅ LOGO SPOTIFY */}
+              <div style={{ marginBottom: "16px" }}>
+                <img 
+                  src="/iconspotify.png" 
+                  alt="Spotify Logo" 
+                  style={{ 
+                    height: "54px", 
+                    objectFit: "contain", 
+                    filter: "brightness(0) invert(1)" 
+                  }} 
+                />
+              </div>
+
               <div className="m-home-top">
                 <h1 className="m-greeting">{greeting()}</h1>
               </div>
@@ -347,7 +359,7 @@ function MobileViewContent() {
 
             <div className="m-counter-banner">
               <span className="m-counter-label">Together for</span>
-              <span className="m-counter-val">{days}d {hours}h {minutes}m {seconds}s 💕</span>
+              <span className="m-counter-val">{days}d {hours}h {minutes}m {seconds}s </span>
             </div>
 
             <div className="m-section">

@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
-import { useRouter } from "next/navigation"; // <-- Tambahan untuk router query parameter
+import { useRouter, useSearchParams } from "next/navigation"; 
 import "./Desktop.css";
 
 const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
@@ -213,7 +213,9 @@ function MasonryGallery({ photos, accent, emoji, onOpen }) {
 }
 
 export default function DesktopView() {
-  const router = useRouter(); // <-- Deklarasi router
+  const router = useRouter(); 
+  const searchParams = useSearchParams(); 
+  
   const { data: session, status } = useSession();
   const [view, setView] = useState("home");
   const [activePlaylist, setActivePlaylist] = useState(null);
@@ -455,7 +457,7 @@ export default function DesktopView() {
   const useCounter = () => {
   const [time, setTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   useEffect(() => {
-    const start = new Date("2025-10-25T22:30:00"); // <-- Tanggal dari database kamu
+    const start = new Date("2025-10-25T22:30:00");
     const tick = () => {
       const now = new Date();
       const diff = now - start;
@@ -473,9 +475,44 @@ export default function DesktopView() {
   return time;
 };
 
-  // <-- Fungsi openPlaylist yang pakai router.push biar URL-nya nambah buntut query!
+  const { days, hours, minutes, seconds } = useCounter();
+
+  // <-- MATA-MATA URL: Sekarang bisa mendeteksi "bulan" DAN "playlist" -->
+  useEffect(() => {
+    const bulan = searchParams.get("bulan");
+    const playlist = searchParams.get("playlist");
+
+    if (bulan) {
+      const namaToId = {
+        october: "oct", november: "nov", december: "dec",
+        january: "jan", february: "feb", march: "mar"
+      };
+      const p = MONTHS.find(x => x.id === namaToId[bulan]);
+      if (p) {
+        setActivePlaylist(p);
+        setView("playlist");
+      }
+    } else if (playlist === "ours") {
+      const p = {
+        id: "ours",
+        name: ourPlaylistInfo?.name || "Our Playlist",
+        emoji: "🎵",
+        desc: ourPlaylistInfo?.description || "The songs that are us.",
+        color: "#1DB954",
+        bg: "#0a2d14",
+        cover: ourPlaylistInfo?.cover,
+      };
+      setActivePlaylist(p);
+      setView("playlist");
+    } else if (!bulan && !playlist && view === "playlist") {
+      setView("home");
+    }
+  }, [searchParams, view, ourPlaylistInfo]);
+
+  // <-- FUNGSI OPEN PLAYLIST: Nambahin "?playlist=ours" -->
   const openPlaylist = (p) => {
     if (p.id === "ours") {
+      router.push('/surprise?playlist=ours'); 
       setActivePlaylist(p);
       setView("playlist");
     } else {
@@ -487,16 +524,11 @@ export default function DesktopView() {
         feb: "february",
         mar: "march"
       };
-      // Ganti URL jadi ?bulan=october tanpa me-reload halaman
       router.push(`/surprise?bulan=${namaBulan[p.id]}`); 
-      
-      // Tetap ubah tampilan komponennya
       setActivePlaylist(p);
       setView("playlist");
     }
   };
-
-  const { days, hours, minutes, seconds } = useCounter();
 
   const PlayIcon = () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff">
@@ -676,7 +708,6 @@ export default function DesktopView() {
                 className="sp-playlist-hero"
                 style={{ background: `linear-gradient(180deg, ${activePlaylist.bg || "#1a3a2a"} 0%, #121212 100%)` }}
               >
-                {/* <-- Tombol back ini dibikin biar bersihin URL juga! --> */}
                 <button className="sp-back-btn" onClick={() => { setView("home"); router.push('/surprise'); }}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M15.957 2.793a1 1 0 0 1 0 1.414L8.164 12l7.793 7.793a1 1 0 1 1-1.414 1.414L5.336 12l9.207-9.207a1 1 0 0 1 1.414 0z"/></svg>
                 </button>
