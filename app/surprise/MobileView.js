@@ -42,7 +42,7 @@ const MONTHS = [
     ],
   },
   {
-    id: "nov", name: "November", emoji: "🍁", desc: "Second month",
+    id: "nov", name: "November", emoji: "🍁", desc: "Uhhh second month",
     color: "#d4537e", bg: "#2d0f1c",
     cover: "/photos/nov-cover.png",
     photos: [
@@ -81,7 +81,7 @@ const MONTHS = [
   {
     id: "jan", name: "January", emoji: "🌸", desc: "New year, same us.",
     color: "#a78bfa", bg: "#1a0d3d",
-    cover: "/photos/jan-cover.jpg",
+    cover: "/photos/jan-cover.png",
     photos: [
       { src: "/photos/jan/1.jpg", w: 4, h: 3 },
       { src: "/photos/jan/2.jpg", w: 3, h: 4 },
@@ -91,12 +91,17 @@ const MONTHS = [
       { src: "/photos/jan/6.jpg", w: 1, h: 1 },
       { src: "/photos/jan/7.jpg", w: 4, h: 3 },
       { src: "/photos/jan/8.jpg", w: 3, h: 4 },
+      { src: "/photos/jan/9.jpg", w: 4, h: 5 },
+      { src: "/photos/jan/10.jpg", w: 1, h: 1 },
+      { src: "/photos/jan/11.jpg", w: 3, h: 2 },
+      { src: "/photos/jan/12.jpg", w: 3, h: 4 },
+      { src: "/photos/jan/13.jpg", w: 4, h: 3 },
     ],
   },
   {
-    id: "feb", name: "February", emoji: "💕", desc: "Valentine's & every little thing.",
+    id: "feb", name: "February", emoji: "💕", desc: "Ramadan's fun.",
     color: "#f472b6", bg: "#2d0f20",
-    cover: "/photos/feb-cover.jpg",
+    cover: "/photos/feb-cover.png",
     photos: [
       { src: "/photos/feb/1.jpg", w: 3, h: 4 },
       { src: "/photos/feb/2.jpg", w: 4, h: 5 },
@@ -106,12 +111,21 @@ const MONTHS = [
       { src: "/photos/feb/6.jpg", w: 3, h: 4 },
       { src: "/photos/feb/7.jpg", w: 1, h: 1 },
       { src: "/photos/feb/8.jpg", w: 4, h: 5 },
+      { src: "/photos/feb/9.jpg", w: 4, h: 3 },
+      { src: "/photos/feb/10.jpg", w: 3, h: 2 },
+      { src: "/photos/feb/11.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/12.jpg", w: 3, h: 4 },
+      { src: "/photos/feb/13.jpg", w: 4, h: 5 },
+      { src: "/photos/feb/14.jpg", w: 4, h: 3 },
+      { src: "/photos/feb/15.jpg", w: 3, h: 2 },
+      { src: "/photos/feb/16.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/17.jpg", w: 3, h: 4 },
     ],
   },
   {
     id: "mar", name: "March", emoji: "🌿", desc: "5 months and counting.",
     color: "#34d399", bg: "#0a2d1f",
-    cover: "/photos/mar-cover.jpg",
+    cover: "/photos/mar-cover.png",
     photos: [
       { src: "/photos/mar/1.jpg", w: 1, h: 1 },
       { src: "/photos/mar/2.jpg", w: 4, h: 3 },
@@ -121,15 +135,23 @@ const MONTHS = [
       { src: "/photos/mar/6.jpg", w: 1, h: 1 },
       { src: "/photos/mar/7.jpg", w: 3, h: 4 },
       { src: "/photos/mar/8.jpg", w: 4, h: 3 },
+      { src: "/photos/mar/9.jpg", w: 4, h: 5 },
+      { src: "/photos/mar/10.jpg", w: 3, h: 2 },
+      { src: "/photos/mar/11.jpg", w: 1, h: 1 },
+      { src: "/photos/mar/12.jpg", w: 4, h: 3 },
+      { src: "/photos/mar/13.jpg", w: 3, h: 4 },
+      { src: "/photos/mar/14.jpg", w: 4, h: 5 },
+      { src: "/photos/mar/15.jpg", w: 3, h: 2 },
+      { src: "/photos/mar/16.jpg", w: 1, h: 1 },
     ],
   },
 ];
 
 const OUR_PLAYLIST = {
   id: "ours",
-  name: "Our Playlist",
+  name: "The Kenisha Tape",
   emoji: "🎵",
-  desc: "The songs that are us.",
+  desc: "A playlist for the way she makes everything softer.",
   color: "#1DB954",
   bg: "#0a2d14",
   cover: "/photos/our-playlist.jpg",
@@ -375,7 +397,7 @@ export default function MobileView() {
               </div>
             </div>
 
-            <div style={{ height: 32 }} />
+            <div style={{ height: 2 }} />
           </div>
         )}
 

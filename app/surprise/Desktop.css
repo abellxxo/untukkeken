@@ -1,28 +1,28 @@
 /* Import Font Lokal */
 @font-face {
   font-family: 'SpotifyMix';
-  src: url('/fonts/SpotifyMix-Thin.ttf') format('truetype');
+  src: url('/fonts/SpotifyMix-Thin.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SpotifyMix';
-  src: url('/fonts/SpotifyMix-Regular.ttf') format('truetype');
+  src: url('/fonts/SpotifyMix-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SpotifyMix';
-  src: url('/fonts/SpotifyMix-Bold.ttf') format('truetype');
+  src: url('/fonts/SpotifyMix-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SpotifyMix';
-  src: url('/fonts/SpotifyMix-Bold.ttf') format('truetype');
+  src: url('/fonts/SpotifyMix-Bold.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
 }
@@ -206,7 +206,7 @@
 }
 
 .sp-greeting {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 900;
   margin-bottom: 20px;
 }
@@ -242,8 +242,8 @@
 }
 
 .sp-quick-thumb {
-  width: 68px;
-  height: 68px;
+  width: 64px;
+  height: 64px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -252,7 +252,7 @@
 }
 
 .sp-quick-name {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 400;
   padding: 0 8px;
   flex: 1;
@@ -1192,7 +1192,7 @@
   }
 
   .sp-section-title {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   .sp-cards-grid {

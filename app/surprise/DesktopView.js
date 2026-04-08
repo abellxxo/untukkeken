@@ -30,7 +30,7 @@ const MONTHS = [
     ]
   },
   {
-    id: "nov", name: "November", emoji: "🍁", cover: "/nov-cover.png", desc: "Getting to know each other.", color: "#d4537e", bg: "#2d0f1c",
+    id: "nov", name: "November", emoji: "🍁", cover: "/nov-cover.png", desc: "Uhhh second month.", color: "#d4537e", bg: "#2d0f1c",
     photos: [
       { src: "/photos/nov/1.jpg", w: 3, h: 4 },
       { src: "/photos/nov/2.jpg", w: 1, h: 1 },
@@ -47,7 +47,7 @@ const MONTHS = [
     ]
   },
   {
-    id: "dec", name: "December", emoji: "❄️", cover: "/dec-cover.png", desc: "Holiday feelings with you.", color: "#4facfe", bg: "#0a1f3d",
+    id: "dec", name: "December", emoji: "❄️", cover: "/dec-cover.png", desc: "It's all about you.", color: "#4facfe", bg: "#0a1f3d",
     photos: [
       { src: "/photos/dec/1.jpg", w: 1, h: 1 },
       { src: "/photos/dec/2.jpg", w: 4, h: 5 },
@@ -63,7 +63,7 @@ const MONTHS = [
     ]
   },
   {
-    id: "jan", name: "January", emoji: "🌸", cover: "/jan-cover.png", desc: "New year, same us.", color: "#a78bfa", bg: "#1a0d3d",
+    id: "jan", name: "January", emoji: "🌸", cover: "/jan-cover.png", desc: "New year.", color: "#a78bfa", bg: "#1a0d3d",
     photos: [
       { src: "/photos/jan/1.jpg", w: 4, h: 3 },
       { src: "/photos/jan/2.jpg", w: 3, h: 4 },
@@ -73,10 +73,15 @@ const MONTHS = [
       { src: "/photos/jan/6.jpg", w: 1, h: 1 },
       { src: "/photos/jan/7.jpg", w: 4, h: 3 },
       { src: "/photos/jan/8.jpg", w: 3, h: 4 },
+      { src: "/photos/jan/9.jpg", w: 4, h: 5 },
+      { src: "/photos/jan/10.jpg", w: 1, h: 1 },
+      { src: "/photos/jan/11.jpg", w: 3, h: 2 },
+      { src: "/photos/jan/12.jpg", w: 3, h: 4 },
+      { src: "/photos/jan/13.jpg", w: 4, h: 3 },
     ]
   },
   {
-    id: "feb", name: "February", emoji: "💕", cover: "/feb-cover.png", desc: "Valentine's & every little thing.", color: "#f472b6", bg: "#2d0f20",
+    id: "feb", name: "February", emoji: "💕", cover: "/feb-cover.png", desc: "Ramadan's fun", color: "#f472b6", bg: "#2d0f20",
     photos: [
       { src: "/photos/feb/1.jpg", w: 3, h: 4 },
       { src: "/photos/feb/2.jpg", w: 4, h: 5 },
@@ -86,6 +91,15 @@ const MONTHS = [
       { src: "/photos/feb/6.jpg", w: 3, h: 4 },
       { src: "/photos/feb/7.jpg", w: 1, h: 1 },
       { src: "/photos/feb/8.jpg", w: 4, h: 5 },
+      { src: "/photos/feb/9.jpg", w: 4, h: 3 },
+      { src: "/photos/feb/10.jpg", w: 3, h: 2 },
+      { src: "/photos/feb/11.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/12.jpg", w: 3, h: 4 },
+      { src: "/photos/feb/13.jpg", w: 4, h: 5 },
+      { src: "/photos/feb/14.jpg", w: 4, h: 3 },
+      { src: "/photos/feb/15.jpg", w: 3, h: 2 },
+      { src: "/photos/feb/16.jpg", w: 1, h: 1 },
+      { src: "/photos/feb/17.jpg", w: 3, h: 4 },
     ]
   },
   {
@@ -99,6 +113,14 @@ const MONTHS = [
       { src: "/photos/mar/6.jpg", w: 1, h: 1 },
       { src: "/photos/mar/7.jpg", w: 3, h: 4 },
       { src: "/photos/mar/8.jpg", w: 4, h: 3 },
+      { src: "/photos/mar/9.jpg", w: 4, h: 5 },
+      { src: "/photos/mar/10.jpg", w: 3, h: 2 },
+      { src: "/photos/mar/11.jpg", w: 1, h: 1 },
+      { src: "/photos/mar/12.jpg", w: 4, h: 3 },
+      { src: "/photos/mar/13.jpg", w: 3, h: 4 },
+      { src: "/photos/mar/14.jpg", w: 4, h: 5 },
+      { src: "/photos/mar/15.jpg", w: 3, h: 2 },
+      { src: "/photos/mar/16.jpg", w: 1, h: 1 },
     ]
   },
 ];
@@ -483,8 +505,8 @@ export default function DesktopView() {
     return (
       <div style={{ background: "#000", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 24 }}>
         <img src="/iconspotify.png" alt="logo" width={300} style={{ objectFit: "contain" }} />
-        <button onClick={() => signIn("spotify")} style={{ background: "#1DB954", color: "#000", border: "none", borderRadius: 500, padding: "14px 40px", fontSize: 15, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-          Login sek
+        <button onClick={() => signIn("spotify")} style={{ background: "#1DB954", color: "#000", border: "none", borderRadius: 500, padding: "14px 40px", fontSize: 15, fontWeight: 400, cursor: "pointer", letterSpacing: 1 }}>
+          Login with Silit
         </button>
       </div>
     );
@@ -601,7 +623,7 @@ export default function DesktopView() {
             </div>
             <div className="sp-section">
               <div className="sp-section-header">
-                <span className="sp-section-title">Our months together 🗓</span>
+                <span className="sp-section-title">Our months together</span>
               </div>
               <div className="sp-cards-grid">
                 {MONTHS.map(p => (
