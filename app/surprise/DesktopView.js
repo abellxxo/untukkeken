@@ -82,7 +82,7 @@ const MONTHS = [
     ]
   },
   {
-    id: "feb", name: "February", emoji: "💕", cover: "/feb-cover.png", desc: "Ramadan's fun", color: "#f472b6", bg: "#2d0f20",
+    id: "feb", name: "February", emoji: "💕", cover: "/feb-cover.png", desc: "Ramadan's fun.", color: "#f472b6", bg: "#2d0f20",
     photos: [
       { src: "/photos/feb/1.jpg", w: 3, h: 4 },
       { src: "/photos/feb/2.jpg", w: 4, h: 5 },

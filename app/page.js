@@ -16,7 +16,8 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   // === JANGAN LUPA GANTI TANGGAL JADIAN KALIAN DI SINI ===
-  const TARGET_DATE = "okok"; 
+  const TARGET_DATE = "251025";
+  const TARGET_NAME = "Kenisha";
 
   // Trik "Paksa" Autoplay Safari jalan pas halaman baru dibuka
   useEffect(() => {
