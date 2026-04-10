@@ -1,4 +1,5 @@
 import Providers from "./providers";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: "Untuk Keken",
@@ -37,6 +38,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <Providers>{children}</Providers>
+        <Analytics />
       </body>
     </html>
   );
