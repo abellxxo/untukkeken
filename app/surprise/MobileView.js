@@ -2,8 +2,9 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import "./Mobile.css";
+import WrappedScreen from "./WrappedScreen";
 
-const PLAYLIST_ID  = "1SIFyACKuXgde8rEcgWVby";
+const PLAYLIST_ID = "1SIFyACKuXgde8rEcgWVby";
 const PLAYLIST_URL = `https://open.spotify.com/playlist/${PLAYLIST_ID}`;
 
 // Pakai ini biar PWA gak white screen pas balik dari Spotify
@@ -254,29 +255,32 @@ function MobileViewContent() {
   const pathname = usePathname();
 
   const [view, setView] = useState("home");
-  const [previousView, setPreviousView] = useState("home"); 
+  const [previousView, setPreviousView] = useState("home");
   const [activePlaylist, setActivePlaylist] = useState(null);
   const [lightbox, setLightbox] = useState(null);
   const { days, hours, minutes, seconds } = useCounter();
 
-  // Membaca URL parameter "?bulan=..."
+  // Membaca URL parameter "?bulan=..." dan "?wrapped"
   const bulanParam = searchParams.get("bulan");
+  const wrappedParam = searchParams.get("wrapped");
 
   // Efek untuk memantau perubahan URL dan Swipe-Back
   useEffect(() => {
-    if (bulanParam) {
+    if (wrappedParam !== null) {
+      setView("wrapped");
+    } else if (bulanParam) {
       const foundMonth = MONTHS.find(m => m.id === bulanParam);
       if (foundMonth) {
         setActivePlaylist(foundMonth);
         setView("playlist");
       }
     } else {
-      if (view === "playlist") {
-        setView(previousView); 
+      if (view === "playlist" || view === "wrapped") {
+        setView(previousView);
         setActivePlaylist(null);
       }
     }
-  }, [bulanParam, view, previousView]);
+  }, [bulanParam, wrappedParam, view, previousView]);
 
   useEffect(() => {
     const handleEsc = (e) => {
@@ -298,7 +302,7 @@ function MobileViewContent() {
       openSpotify(PLAYLIST_URL);
       return;
     }
-    setPreviousView(view); 
+    setPreviousView(view);
     router.push(`${pathname}?bulan=${p.id}`);
   };
 
@@ -312,17 +316,17 @@ function MobileViewContent() {
         {view === "home" && (
           <div className="m-home">
             <div className="m-home-hero">
-              
+
               {/* ✅ LOGO SPOTIFY */}
               <div style={{ marginBottom: "16px" }}>
-                <img 
-                  src="/iconspotify.png" 
-                  alt="Spotify Logo" 
-                  style={{ 
-                    height: "54px", 
-                    objectFit: "contain", 
-                    filter: "brightness(0) invert(1)" 
-                  }} 
+                <img
+                  src="/iconspotify.png"
+                  alt="Spotify Logo"
+                  style={{
+                    height: "54px",
+                    objectFit: "contain",
+                    filter: "brightness(0) invert(1)"
+                  }}
                 />
               </div>
 
@@ -337,16 +341,21 @@ function MobileViewContent() {
                       style={{ background: p.cover ? "transparent" : p.color, overflow: "hidden" }}
                     >
                       {p.cover ? (
-                        <img
-                          src={p.cover}
-                          alt={p.name}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                            e.target.parentNode.style.background = p.color;
-                            e.target.parentNode.innerHTML = `<span style="font-size:20px">${p.emoji}</span>`;
-                          }}
-                        />
+                        <>
+                          <img
+                            src={p.cover}
+                            alt={p.name}
+                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            onError={(e) => {
+                              e.target.style.display = "none";
+                              const fallback = e.target.parentNode.querySelector(".m-quick-emoji-fallback");
+                              if (fallback) fallback.style.display = "flex";
+                            }}
+                          />
+                          <div className="m-quick-emoji-fallback" style={{ display: "none", width: "100%", height: "100%", alignItems: "center", justifyContent: "center", background: p.color, position: "absolute", inset: 0 }}>
+                            <span style={{ fontSize: 20 }} suppressHydrationWarning>{p.emoji}</span>
+                          </div>
+                        </>
                       ) : (
                         <span style={{ fontSize: 20 }} suppressHydrationWarning>{p.emoji}</span>
                       )}
@@ -360,6 +369,117 @@ function MobileViewContent() {
             <div className="m-counter-banner">
               <span className="m-counter-label">Together for</span>
               <span className="m-counter-val">{days}d {hours}h {minutes}m {seconds}s </span>
+            </div>
+
+            {/* ── WRAPPED CARD ── */}
+            <div style={{ padding: "0 16px", marginBottom: "24px" }}>
+              <div style={{
+                position: "relative",
+                width: "100%",
+                background: "linear-gradient(135deg, #1ed760 0%, #ff00cc 100%)",
+                borderRadius: "8px",
+                padding: "24px",
+                overflow: "hidden",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}>
+
+                {/* Background Shapes */}
+                <svg width="0" height="0" style={{ position: "absolute" }}>
+                  <defs>
+                    <clipPath id="spiky-shape" clipPathUnits="objectBoundingBox">
+                      <polygon points="0.5 0, 0.6 0.3, 0.9 0.2, 0.7 0.5, 1 0.7, 0.6 0.7, 0.5 1, 0.4 0.7, 0 0.7, 0.3 0.5, 0.1 0.2, 0.4 0.3" />
+                    </clipPath>
+                    <clipPath id="squiggly-shape" clipPathUnits="objectBoundingBox">
+                      <path d="M0.1,0.5 C0.1,0.2 0.4,0.1 0.6,0.3 C0.8,0.5 1 0.4 0.9,0.8 C0.8,1.1 0.4,1 0.2,0.8 C0,0.6 0.1,0.5 0.1,0.5 Z" />
+                    </clipPath>
+                  </defs>
+                </svg>
+
+                <div style={{
+                  position: "absolute",
+                  top: "-10%",
+                  right: "-5%",
+                  width: "120px",
+                  height: "120px",
+                  backgroundColor: "#5e17eb",
+                  clipPath: "url(#spiky-shape)",
+                  transform: "rotate(15deg)",
+                  opacity: 0.8
+                }} />
+
+                <div style={{
+                  position: "absolute",
+                  bottom: "-15%",
+                  left: "10%",
+                  width: "100px",
+                  height: "100px",
+                  backgroundColor: "#ffdb00",
+                  clipPath: "url(#squiggly-shape)",
+                  transform: "rotate(-20deg)",
+                  opacity: 0.9
+                }} />
+
+                <div style={{
+                  position: "absolute",
+                  top: "20%",
+                  right: "40%",
+                  width: "20px",
+                  height: "20px",
+                  backgroundColor: "#fff",
+                  borderRadius: "50%",
+                  opacity: 0.5
+                }} />
+
+                {/* Content */}
+                <div style={{ position: "relative", zIndex: 1, flex: 1, paddingRight: "16px" }}>
+                  <p style={{
+                    margin: 0,
+                    fontSize: "12px",
+                    fontWeight: "800",
+                    textTransform: "uppercase",
+                    letterSpacing: "1px",
+                    color: "#fff",
+                    opacity: 0.9,
+                    marginBottom: "4px"
+                  }}>
+                    6 Months Wrapped
+                  </p>
+                  <h3 style={{
+                    margin: 0,
+                    fontSize: "24px",
+                    fontWeight: "900",
+                    lineHeight: "1.2",
+                    color: "#fff",
+                    textShadow: "2px 2px 0px rgba(0,0,0,0.2)"
+                  }}>
+                    Have a look at our 6 mo in review.
+                  </h3>
+                </div>
+
+                {/* Action */}
+                <div style={{ position: "relative", zIndex: 1 }}>
+                  {/* Start Pill Button */}
+                  <button onClick={(e) => { e.stopPropagation(); router.push(`${pathname}?wrapped`); }} style={{
+                    backgroundColor: "#fff",
+                    color: "#000",
+                    border: "none",
+                    borderRadius: "24px",
+                    padding: "8px 20px",
+                    fontSize: "13px",
+                    fontWeight: "800",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                    flexShrink: 0,
+                    marginBottom: "2px"
+                  }}>
+                    Start
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="m-section">
@@ -387,9 +507,9 @@ function MobileViewContent() {
               <div className="m-section-header">
                 <span className="m-section-title">Our Playlist 🎵</span>
               </div>
-              
-              <div 
-                className="m-feature-card" 
+
+              <div
+                className="m-feature-card"
                 onClick={() => openPlaylist(OUR_PLAYLIST)}
                 role="button"
                 tabIndex={0}
@@ -509,14 +629,14 @@ function MobileViewContent() {
           className={`m-nav-item${view === "home" ? " active" : ""}`}
           onClick={() => {
             setView("home");
-            if (bulanParam) router.push(pathname); 
+            if (bulanParam) router.push(pathname);
           }}
           aria-label="Home"
         >
-          <img 
-            src="/home-icon.png" 
-            alt="Home Icon" 
-            style={{ width: "24px", height: "24px", objectFit: "contain" }} 
+          <img
+            src="/home-icon.png"
+            alt="Home Icon"
+            style={{ width: "24px", height: "24px", objectFit: "contain" }}
           />
           <span>Home</span>
         </button>
@@ -524,14 +644,14 @@ function MobileViewContent() {
           className={`m-nav-item${view === "library" ? " active" : ""}`}
           onClick={() => {
             setView("library");
-            if (bulanParam) router.push(pathname); 
+            if (bulanParam) router.push(pathname);
           }}
           aria-label="Your Library"
         >
-          <img 
-            src="/lib-icon.png" 
-            alt="Library Icon" 
-            style={{ width: "24px", height: "24px", objectFit: "contain" }} 
+          <img
+            src="/lib-icon.png"
+            alt="Library Icon"
+            style={{ width: "24px", height: "24px", objectFit: "contain" }}
           />
           <span>Your Library</span>
         </button>
@@ -555,6 +675,9 @@ function MobileViewContent() {
           </div>
         </div>
       )}
+
+      {/* ── WRAPPED FULLSCREEN COMPONENT ── */}
+      {view === "wrapped" && <WrappedScreen onClose={() => router.push(pathname)} />}
     </div>
   );
 }

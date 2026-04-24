@@ -1,5 +1,6 @@
 /* ── BASE ─────────────────────────────────────────────────────────────────── */
-html, body {
+html,
+body {
   background-color: #121212;
   margin: 0;
   padding: 0;
@@ -37,13 +38,17 @@ html, body {
   padding-bottom: 8px;
 }
 
-.m-scroll::-webkit-scrollbar { display: none; }
+.m-scroll::-webkit-scrollbar {
+  display: none;
+}
 
-.m-scroll.m-scroll-fixed { overflow-y: hidden; }
+.m-scroll.m-scroll-fixed {
+  overflow-y: hidden;
+}
 
 /* ── HOME VIEW ────────────────────────────────────────────────────────────── */
 .m-home-hero {
-  background: linear-gradient(180deg, #3b13b0 0%, #271362 30%, #1b1235 65%, #121212 100%);
+  background: linear-gradient(180deg, #bd35ab 0%, #1b1235 30%, #1b1235 65%, #121212 100%);
   padding: 20px 16px 24px;
 }
 
@@ -80,7 +85,9 @@ html, body {
   transition: background 0.15s;
 }
 
-.m-quick-card:active { background: rgba(255, 255, 255, 0.2); }
+.m-quick-card:active {
+  background: rgba(255, 255, 255, 0.2);
+}
 
 .m-quick-thumb {
   width: 56px;
@@ -103,7 +110,8 @@ html, body {
 
 /* ── COUNTER ──────────────────────────────────────────────────────────────── */
 .m-counter-banner {
-  margin: 8px 16px 32px; /* ✅ Jarak presisi: 32px dari elemen di atas & bawahnya */
+  margin: 8px 16px 32px;
+  /* ✅ Jarak presisi: 32px dari elemen di atas & bawahnya */
   background: #1DB954;
   border-radius: 8px;
   padding: 12px 16px;
@@ -129,12 +137,16 @@ html, body {
 
 /* ── SECTIONS ─────────────────────────────────────────────────────────────── */
 .m-section {
-  padding: 0 16px; /* ✅ Hilangkan padding atas ganda */
-  margin-bottom: 24px; /* ✅ Margin bawah seragam */
+  padding: 0 16px;
+  /* ✅ Hilangkan padding atas ganda */
+  margin-bottom: 24px;
+  /* ✅ Margin bawah seragam */
   overflow: visible;
 }
 
-.m-section-header { margin-bottom: 14px; }
+.m-section-header {
+  margin-bottom: 14px;
+}
 
 .m-section-title {
   font-size: 20px;
@@ -151,14 +163,17 @@ html, body {
   margin-right: -16px;
   padding-left: 16px;
   padding-right: 16px;
-  padding-bottom: 8px; /* ✅ Jarak pas ke elemen di bawahnya */
+  padding-bottom: 8px;
+  /* ✅ Jarak pas ke elemen di bawahnya */
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
-  scroll-padding: 0 16px; 
+  scroll-padding: 0 16px;
 }
 
-.m-cards-scroll::-webkit-scrollbar { display: none; }
+.m-cards-scroll::-webkit-scrollbar {
+  display: none;
+}
 
 .m-card {
   flex-shrink: 0;
@@ -174,17 +189,19 @@ html, body {
   scroll-snap-align: start;
 }
 
-.m-card:active { background: #282828; }
+.m-card:active {
+  background: #282828;
+}
 
 .m-card-img {
   width: 100%;
-  height: 116px; 
+  height: 116px;
   border-radius: 6px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 .m-card-title {
@@ -212,8 +229,8 @@ html, body {
   gap: 16px;
   background: #1a1a1a;
   border-radius: 10px;
-  overflow: hidden; 
-  padding: 0;       
+  overflow: hidden;
+  padding: 0;
   border: none;
   cursor: pointer;
   text-align: left;
@@ -222,7 +239,9 @@ html, body {
   transition: background 0.15s;
 }
 
-.m-feature-card:active { background: #242424; }
+.m-feature-card:active {
+  background: #242424;
+}
 
 .m-feature-thumb {
   width: 140px;
@@ -231,8 +250,8 @@ html, body {
   background: #282828;
   margin: 0;
   padding: 0;
-  border-radius: 8px 0 0 8px; 
-  overflow: hidden;            
+  border-radius: 8px 0 0 8px;
+  overflow: hidden;
 }
 
 .m-feature-info {
@@ -283,7 +302,9 @@ html, body {
   transition: transform 0.1s;
 }
 
-.m-play-circle:active { transform: scale(0.95); }
+.m-play-circle:active {
+  transform: scale(0.95);
+}
 
 /* ── LIBRARY VIEW ─────────────────────────────────────────────────────────── */
 .m-library {
@@ -317,7 +338,9 @@ html, body {
   width: 100%;
 }
 
-.m-lib-item:active { background: #1a1a1a; }
+.m-lib-item:active {
+  background: #1a1a1a;
+}
 
 .m-lib-thumb {
   width: 52px;
@@ -329,7 +352,10 @@ html, body {
   justify-content: center;
 }
 
-.m-lib-info { flex: 1; min-width: 0; }
+.m-lib-info {
+  flex: 1;
+  min-width: 0;
+}
 
 .m-lib-name {
   font-size: 15px;
@@ -455,8 +481,15 @@ html, body {
 }
 
 @keyframes mshimmer {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .m-masonry-img {
@@ -470,7 +503,9 @@ html, body {
   transition: opacity 0.35s ease;
 }
 
-.m-masonry-img.loaded { opacity: 1; }
+.m-masonry-img.loaded {
+  opacity: 1;
+}
 
 .m-masonry-caption {
   position: absolute;
@@ -523,7 +558,9 @@ html, body {
   transition: color 0.15s;
 }
 
-.m-nav-item.active { color: #fff; }
+.m-nav-item.active {
+  color: #fff;
+}
 
 /* ── LIGHTBOX ─────────────────────────────────────────────────────────────── */
 .m-lightbox {
@@ -540,8 +577,13 @@ html, body {
 }
 
 @keyframes mlb-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .m-lightbox-close {
@@ -572,8 +614,15 @@ html, body {
 }
 
 @keyframes mlb-scale {
-  from { transform: scale(0.88); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.88);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .m-lightbox-img {

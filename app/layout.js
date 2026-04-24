@@ -37,6 +37,19 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
       <body>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            body {
+              -webkit-touch-callout: none; /* Hilangin popup menu iOS */
+              -webkit-user-select: none;   /* Safari/Chrome mobile */
+              user-select: none;           /* Standard */
+            }
+            input, textarea {
+              -webkit-user-select: auto;   /* Balikin biar form login tetap bisa diketik/select text */
+              user-select: auto;
+            }
+          `
+        }} />
         <Providers>{children}</Providers>
         <Analytics />
       </body>
