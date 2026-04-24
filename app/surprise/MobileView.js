@@ -258,6 +258,7 @@ function MobileViewContent() {
   const [previousView, setPreviousView] = useState("home");
   const [activePlaylist, setActivePlaylist] = useState(null);
   const [lightbox, setLightbox] = useState(null);
+  const [greeting, setGreeting] = useState("");
   const { days, hours, minutes, seconds } = useCounter();
 
   // Membaca URL parameter "?bulan=..." dan "?wrapped"
@@ -290,12 +291,12 @@ function MobileViewContent() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, []);
 
-  const greeting = () => {
+  useEffect(() => {
     const h = new Date().getHours();
-    if (h < 12) return "Good morning, Kenisha";
-    if (h < 17) return "Good afternoon, Sayang";
-    return "Good evening, Bb";
-  };
+    if (h < 12) setGreeting("Good morning, Kenisha");
+    else if (h < 17) setGreeting("Good afternoon, Sayang");
+    else setGreeting("Good evening, Bb");
+  }, []);
 
   const openPlaylist = (p) => {
     if (p.id === "ours") {
@@ -331,7 +332,7 @@ function MobileViewContent() {
               </div>
 
               <div className="m-home-top">
-                <h1 className="m-greeting">{greeting()}</h1>
+                <h1 className="m-greeting">{greeting}</h1>
               </div>
               <div className="m-quick-grid">
                 {allPlaylists.slice(0, 6).map(p => (
